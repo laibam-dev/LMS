@@ -42,8 +42,27 @@ $result = mysqli_query($conn, $sql);
                 <a href="toggle_status.php?id=<?= $course['id'] ?>"
                    class="btn btn-sm btn-outline-warning">
                     <?= $course['status'] === 'published' ? 'Unpublish' : 'Publish' ?>
-                </a>
-            </div>
+        <div class="d-inline-flex gap-2">
+
+    <a href="course_detail.php?id=<?= $course['id'] ?>"
+       class="btn btn-sm btn-outline-primary">
+        View
+    </a>
+
+    <?php if ($course['status'] === 'published') { ?>
+        <a href="toggle_status.php?id=<?= $course['id'] ?>&status=draft"
+           class="btn btn-sm btn-outline-warning">
+            Unpublish
+        </a>
+    <?php } else { ?>
+        <a href="toggle_status.php?id=<?= $course['id'] ?>&status=published"
+           class="btn btn-sm btn-outline-success">
+            Publish
+        </a>
+    <?php } ?>
+
+</div>
+
 
         </div>
     <?php } ?>
