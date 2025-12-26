@@ -33,15 +33,6 @@ $result = mysqli_query($conn, $sql);
                 <?php } ?>
             </div>
 
-            <div>
-                <a href="course_detail.php?id=<?= $course['id'] ?>"
-                   class="btn btn-sm btn-outline-primary me-2">
-                    View
-                </a>
-
-                <a href="toggle_status.php?id=<?= $course['id'] ?>"
-                   class="btn btn-sm btn-outline-warning">
-                    <?= $course['status'] === 'published' ? 'Unpublish' : 'Publish' ?>
         <div class="d-inline-flex gap-2">
 
     <a href="course_detail.php?id=<?= $course['id'] ?>"
