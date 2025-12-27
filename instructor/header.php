@@ -40,7 +40,7 @@ $email = $_SESSION['email'] ?? '';
     <div class="sidebar d-flex flex-column justify-content-between">
 
         <div>
-            <h5 class="text-white px-3 pt-3 mb-1">Academia</h5>
+            <h5 class="text-white px-3 pt-3 mb-1">LMS</h5>
             <small class="text-secondary px-3">Teacher Portal</small>
             <hr>
 
