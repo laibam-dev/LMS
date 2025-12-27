@@ -2,13 +2,13 @@
 session_start();
 include "../config/db.php";
 
-// 🔐 login check
+// login protection
 if (!isset($_SESSION['admin'])) {
     header("Location: login.php");
     exit();
 }
 
-// 📊 analytics queries
+// analytics queries
 $totalUsers = mysqli_fetch_assoc(
     mysqli_query($conn, "SELECT COUNT(*) AS total FROM users")
 )['total'];
@@ -28,26 +28,13 @@ $totalCourses = mysqli_fetch_assoc(
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Dashboard</title>
+    <title>Admin Analytics</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-<h2>Admin Dashboard</h2>
+<h2>Analytics</h2>
 
-<!-- 🔗 NAV -->
-<ul>
-    <li><a href="profile.php">Profile</a></li>
-    <li><a href="users.php">User Management</a></li>
-    <li><a href="analytics.php">Analytics</a></li>
-    <li><a href="logout.php">Logout</a></li>
-
-
-</ul>
-
-<hr>
-
-<!-- 📊 STATS -->
 <p>Total Users: <b><?= $totalUsers ?></b></p>
 <p>Total Students: <b><?= $totalStudents ?></b></p>
 <p>Total Instructors: <b><?= $totalInstructors ?></b></p>
@@ -55,31 +42,29 @@ $totalCourses = mysqli_fetch_assoc(
 
 <hr>
 
-<!-- 📈 GRAPH -->
-<canvas id="adminChart" width="300"></canvas>
+<canvas id="analyticsChart" width="300"></canvas>
 
 <script>
-const ctx = document.getElementById('adminChart');
+const ctx = document.getElementById('analyticsChart');
 
 new Chart(ctx, {
-    type: 'bar',
+    type: 'pie',
     data: {
-        labels: ['Users', 'Students', 'Instructors', 'Courses'],
+        labels: ['Students', 'Instructors'],
         datasets: [{
-            label: 'LMS Statistics',
-            data: [
-                <?= $totalUsers ?>,
-                <?= $totalStudents ?>,
-                <?= $totalInstructors ?>,
-                <?= $totalCourses ?>
-            ]
+            data: [<?= $totalStudents ?>, <?= $totalInstructors ?>]
         }]
     }
 });
 </script>
+
+<br>
+<a href="index.php">⬅ Back to Dashboard</a>
+
 <link rel="stylesheet" href="../assets/css/admin.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="../assets/js/chart.js"></script>
+
 
 </body>
 </html>
