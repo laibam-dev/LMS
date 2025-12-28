@@ -1,6 +1,11 @@
 <?php
-$conn = mysqli_connect("localhost", "root", "", "lms");
+$host = 'localhost';
+$db   = 'lms';
+$user = 'root';
+$pass = '';
 
-if (!$conn) {
-    die("Database connection failed");
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
+?>
