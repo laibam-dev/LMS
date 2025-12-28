@@ -1,0 +1,17 @@
+body{ font-family: Arial, sans-serif;
+     margin:0; padding:0;
+     background:#f2f2f2; } 
+.container{ width:90%; margin:20px auto; }
+ .section{ background:#fff; padding:20px; 
+    margin-bottom:20px;
+     border-radius:8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+      h2{ margin-top:0; }
+       .card{ display:inline-block;
+         width:200px; margin:10px; padding:15px;
+          background:#e8f0fe; border-radius:8px;
+           text-align:center; } .button{ display:inline-block;
+             padding:10px 20px; background:#007bff; 
+             color:#fff; text-decoration:none; 
+             border-radius:5px; margin:5px 0; } 
+             .button:hover{ background:#0056b3; } 
+             .greeting{ font-size:18px; }
