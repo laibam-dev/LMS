@@ -34,3 +34,11 @@ if (isset($_POST['login'])) {
 
         } else {
             header("Location: login.php?error=invalid");
+            exit;
+        }
+
+    } else {
+        header("Location: login.php?error=invalid");
+        exit;
+    }
+}
