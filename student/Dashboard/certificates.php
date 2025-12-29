@@ -1,6 +1,5 @@
 <?php
 session_start();
-// Agar student login nahi hai → redirect to login
 if(!isset($_SESSION['student_id'])){
     header("Location: ../login.php");
     exit();

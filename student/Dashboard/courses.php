@@ -7,15 +7,13 @@ if (!isset($_SESSION['student_id'])) {
     exit();
 }
 $student_id = $_SESSION['student_id'];
-// course_id from URL
+
 if (!isset($_GET['course_id'])) {
     die("Course not found");
 }
 $course_id = $_GET['course_id'];
 
-/*
-1️⃣ Check: student is enrolled in this course?
-*/
+
 $check = $conn->prepare("
     SELECT c.id, c.title, c.description, se.progress
     FROM student_enrollment se
@@ -31,7 +29,7 @@ if ($result->num_rows == 0) {
 }
 $course = $result->fetch_assoc();
 
-// Lessons fetch
+
 $lesson_stmt = $conn->prepare("SELECT * FROM lessons WHERE course_id = ?");
 $lesson_stmt->bind_param("i", $course_id);
 $lesson_stmt->execute();
@@ -52,7 +50,6 @@ while($row = $completed_lessons_result->fetch_assoc()){
 }
 
 
-// Assessments fetch
 $assess_stmt = $conn->prepare("SELECT * FROM assessments WHERE course_id = ?");
 $assess_stmt->bind_param("i", $course_id);
 $assess_stmt->execute();

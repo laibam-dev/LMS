@@ -21,7 +21,6 @@ if($check->get_result()->num_rows == 0){
     $insert->execute();
 }
 
-/* 2️⃣ Completed lessons count */
 $completed_stmt = $conn->prepare("
     SELECT COUNT(*) AS completed 
     FROM lesson_completion lc
@@ -32,7 +31,7 @@ $completed_stmt->bind_param("ii", $student_id, $course_id);
 $completed_stmt->execute();
 $completed = $completed_stmt->get_result()->fetch_assoc()['completed'];
 
-/* 3️⃣ Total lessons count */
+
 $total_stmt = $conn->prepare(
     "SELECT COUNT(*) AS total FROM lessons WHERE course_id = ?"
 );
@@ -40,10 +39,10 @@ $total_stmt->bind_param("i", $course_id);
 $total_stmt->execute();
 $total = $total_stmt->get_result()->fetch_assoc()['total'];
 
-/* 4️⃣ Progress calculate */
+
 $progress = ($total > 0) ? round(($completed / $total) * 100) : 0;
 
-/* 5️⃣ student_enrollment update */
+
 $update = $conn->prepare(
     "UPDATE student_enrollment 
      SET progress = ? 
@@ -52,6 +51,6 @@ $update = $conn->prepare(
 $update->bind_param("iii", $progress, $student_id, $course_id);
 $update->execute();
 
-/* 6️⃣ Back to course page */
+
 header("Location: courses.php?course_id=".$course_id);
 exit();

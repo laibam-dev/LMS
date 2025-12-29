@@ -61,16 +61,15 @@ $overall_progress = ($course_count > 0)
     
     </div>
 
-    <!-- RIGHT CONTENT -->
+    
     <div class="main-content">
 
-        <!-- WELCOME CARD -->
+        
         <div class="welcome-card">
             <h2>Welcome, <?php echo htmlspecialchars($_SESSION['student_name']); ?> 👋</h2>
             <p>Here is your dashboard overview</p>
         </div>
 
-        <!-- COURSES -->
         <div class="section">
             <h2>My Courses</h2>
 
@@ -91,7 +90,7 @@ $overall_progress = ($course_count > 0)
             <?php endif; ?>
         </div>
 
-        <!-- ANALYTICS + CERTIFICATES -->
+    
         <div class="cards-row">
             <div class="card">
                 <h3>Analytics</h3>
@@ -106,7 +105,7 @@ $overall_progress = ($course_count > 0)
             </div>
         </div>
 
-        <!-- ACHIEVEMENTS -->
+    
         <div class="section">
             <h2>Achievements</h2>
             <div class="cards-row">

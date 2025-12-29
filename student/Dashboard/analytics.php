@@ -1,6 +1,5 @@
 <?php
 session_start();
-// Agar student login nahi hai → redirect to login
 if(!isset($_SESSION['student_id'])){
     header("Location: ../login.php");
     exit();
@@ -11,7 +10,6 @@ require_once '../../config/db.php';
 
 $student_id = $_SESSION['student_id'];
 
-// Student ke enrolled courses aur progress fetch karo
 $sql = "
 SELECT c.title, se.progress
 FROM course c

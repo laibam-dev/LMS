@@ -6,7 +6,7 @@ require('../../assets/fpdf/fpdf.php');
 $student_id = $_SESSION['student_id'];
 $course_id = $_GET['course_id'] ?? die("Course not found");
 
-// Fetch student & course info
+
 $stmt = $conn->prepare("
     SELECT a.name AS student_name, c.title AS course_title
     FROM account a
@@ -21,7 +21,6 @@ if($result->num_rows == 0){
 }
 $data = $result->fetch_assoc();
 
-// Create PDF
 $pdf = new FPDF();
 $pdf->AddPage();
 $pdf->SetFont('Arial','B',16);
@@ -32,11 +31,10 @@ $pdf->Cell(0,10,"This is to certify that ".$data['student_name']." has successfu
 $pdf->Ln(20);
 $pdf->Cell(0,10,"Date: ".date('Y-m-d'),0,1,'C');
 
-// Save PDF to folder
+
 $filename = "../../certificates/certificate_".$student_id."_".$course_id.".pdf";
 $pdf->Output('F', $filename);
 
-// Update certificates table
 $update = $conn->prepare("UPDATE certificates SET status='Generated', issue_date=NOW() WHERE student_id=? AND course_id=?");
 $update->bind_param("ii",$student_id,$course_id);
 $update->execute();

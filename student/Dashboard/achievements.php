@@ -8,7 +8,6 @@ if(!isset($_SESSION['student_id'])){
 
 include '../navbar.php';
 
-// Dummy achievements data (future me DB se fetch hoga)
 $achievements = [
     ["title" => "Completed Web Development", "badge" => "../assets/badge1.png", "date" => "2025-12-01"],
     ["title" => "PHP & MySQL Expert", "badge" => "../assets/badge2.png", "date" => "2025-12-10"],
