@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("Insert error: " . mysqli_error($conn));
     }
 
-    header("Location: course_detail.php?id=$course_id");
+    header("Location: course_detail.php?course_id=$course_id");
     exit;
 }
 ?>

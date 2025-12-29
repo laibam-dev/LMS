@@ -1,0 +1,9 @@
+  body{ font-family: Arial, sans-serif; background:#f2f2f2; margin:0; padding:0; }
+        .container{ width:90%; margin:20px auto; }
+        .section{ background:#fff; padding:20px; margin-bottom:20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+        h2{ margin-top:0; }
+        table{ width:100%; border-collapse: collapse; }
+        th, td{ padding:10px; border-bottom:1px solid #ddd; text-align:left; }
+        .button{ padding:5px 10px; background:#007bff; color:#fff; text-decoration:none; border-radius:5px; }
+        .button.disabled{ background:#ccc; cursor:not-allowed; }
+   

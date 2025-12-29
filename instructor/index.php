@@ -1,109 +1,86 @@
 <?php
-// header + session check
-include "header.php";
-include "../config/db.php";
+session_start();
 
-$instructor_id = $_SESSION['user_id'];
-
-/* ===== Dashboard Stats ===== */
-
-/* Total courses */
-$q1 = mysqli_query(
-    $conn,
-    "SELECT COUNT(*) AS total 
-     FROM courses 
-     WHERE instructor_id = $instructor_id"
-);
-$total_courses = mysqli_fetch_assoc($q1)['total'];
-
-/* Published courses */
-$q2 = mysqli_query(
-    $conn,
-    "SELECT COUNT(*) AS total 
-     FROM courses 
-     WHERE instructor_id = $instructor_id 
-       AND status = 'published'"
-);
-$published_courses = mysqli_fetch_assoc($q2)['total'];
-
-/* Total lessons */
-$q3 = mysqli_query(
-    $conn,
-    "SELECT COUNT(*) AS total 
-     FROM lessons 
-     WHERE course_id IN (
-         SELECT id FROM courses WHERE instructor_id = $instructor_id
-     )"
-);
-$total_lessons = mysqli_fetch_assoc($q3)['total'];
-
-/* PDFs uploaded */
-$q4 = mysqli_query(
-    $conn,
-    "SELECT COUNT(*) AS total 
-     FROM lessons 
-     WHERE pdf_file IS NOT NULL 
-       AND pdf_file != '' 
-       AND course_id IN (
-           SELECT id FROM courses WHERE instructor_id = $instructor_id
-       )"
-);
-$total_pdfs = mysqli_fetch_assoc($q4)['total'];
+if (!isset($_SESSION['instructor_id'])) {
+    header("Location: login.php");
+    exit;
+}
 ?>
 
-<!-- PAGE CONTENT -->
 
-<div class="container-fluid">
+<?php
+// header + session check
+include "../config/db.php";
+include "header.php";
 
-    <!-- Welcome Card -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <h5 class="mb-1">
-                Welcome, <?= htmlspecialchars($_SESSION['name']) ?>
-            </h5>
-            <p class="text-muted mb-0">
-                From here you can manage your courses and lessons.
-            </p>
-        </div>
-    </div>
+$instructor_id = (int)$_SESSION['user_id'];
 
-    <!-- Stats Cards -->
-    <div class="row g-3">
+// Active Courses (published)
+$q1 = mysqli_query($conn, "SELECT COUNT(*) total FROM courses WHERE instructor_id=$instructor_id AND status='published'");
+$active_courses = mysqli_fetch_assoc($q1)['total'] ?? 0;
 
-        <div class="col-md-3">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h6 class="text-muted">Total Courses</h6>
-                    <h3><?= $total_courses ?></h3>
-                </div>
-            </div>
-        </div>
+/// TOTAL STUDENTS
+$q_students = mysqli_query($conn, "
+    SELECT COUNT(DISTINCT e.user_id) AS total
+    FROM enrollments e
+    JOIN courses c ON c.id = e.course_id
+    WHERE c.instructor_id = $instructor_id
+");
+$total_students = mysqli_fetch_assoc($q_students)['total'] ?? 0;
 
-     
+// Upcoming Tasks
+$q3 = mysqli_query($conn, "
+  SELECT COUNT(*) total
+  FROM assignments a
+  JOIN courses c ON c.id = a.course_id
+  WHERE c.instructor_id=$instructor_id
+    AND a.due_date IS NOT NULL
+    AND a.due_date >= CURDATE()
+");
+$upcoming_tasks = mysqli_fetch_assoc($q3)['total'] ?? 0;
+?>
 
-        <div class="col-md-3">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h6>Total Lessons</h6>
-                    <h3><?= $total_lessons ?></h3>
-                </div>
-            </div>
-        </div>
+<div class="page-head">
+  <div>
+    <h1>Welcome back, <?= htmlspecialchars($_SESSION['name'] ?? 'Instructor') ?></h1>
+    <p>Manage your courses and students from here.</p>
+  </div>
 
-        <div class="col-md-3">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h6>PDFs Uploaded</h6>
-                    <h3><?= $total_pdfs ?></h3>
-                </div>
-            </div>
-        </div>
-
-    </div>
+  <!-- FIXED BUTTON -->
+  <a
+    href="courses.php?open=create"
+    class="btn btn-primary px-4 py-2 rounded-3"
+    style="width:auto; display:inline-flex; align-items:center;"
+  >
+    <i class="bi bi-plus-lg me-2"></i>
+    Add Course
+  </a>
 </div>
 
+<div class="stat-grid">
+  <div class="cardx stat">
+    <div class="ico"><i class="bi bi-book"></i></div>
+    <div>
+      <p class="label">Active Courses</p>
+      <p class="val"><?= (int)$active_courses ?></p>
+    </div>
+  </div>
 
+  <div class="cardx stat">
+    <div class="ico"><i class="bi bi-people"></i></div>
+    <div>
+      <p class="label">Total Students</p>
+      <p class="val"><?= (int)$total_students ?></p>
+    </div>
+  </div>
 
-</div> <!-- content -->
-</body>
-</html>
+  <div class="cardx stat">
+    <div class="ico"><i class="bi bi-calendar-event"></i></div>
+    <div>
+      <p class="label">Upcoming Tasks</p>
+      <p class="val"><?= (int)$upcoming_tasks ?></p>
+    </div>
+  </div>
+</div>
+
+<?php include "footer.php"; ?>
