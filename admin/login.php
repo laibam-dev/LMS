@@ -1,42 +1,37 @@
 <?php
 session_start();
-include "../config/db.php";
+require_once "../config/db.php";
 
 $error = "";
 
 if (isset($_POST['login'])) {
-
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $query = "SELECT * FROM admin WHERE email='$email' AND password='$password'";
-    $result = mysqli_query($conn, $query);
+    $sql = "SELECT * FROM users WHERE email='$email' AND role='admin'";
+    $result = $conn->query($sql);
 
-    if (mysqli_num_rows($result) == 1) {
-        $_SESSION['admin'] = $email;
-        header("Location: index.php");
-        exit();
+    if ($result->num_rows == 1) {
+        $user = $result->fetch_assoc();
+
+        if (password_verify($password, $user['password'])) {
+            $_SESSION['admin_id'] = $user['id'];
+            $_SESSION['admin_name'] = $user['name'];
+            header("Location: dashboard.php");
+            exit;
+        } else {
+            $error = "Wrong password";
+        }
     } else {
-        $error = "Invalid email or password";
+        $error = "Admin not found";
     }
 }
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Admin Login</title>
-</head>
-<body>
 
+<form method="POST">
 <h2>Admin Login</h2>
-
-<form method="post">
-    <input type="email" name="email" placeholder="Email" required><br><br>
-    <input type="password" name="password" placeholder="Password" required><br><br>
-    <button type="submit" name="login">Login</button>
-</form>
-
 <p style="color:red;"><?php echo $error; ?></p>
-
-</body>
-</html>
+<input type="email" name="email" placeholder="Email" required><br><br>
+<input type="password" name="password" placeholder="Password" required><br><br>
+<button name="login">Login</button>
+</form>

@@ -1,19 +1,62 @@
 <?php
-require __DIR__ . '/config/db.php';
+session_start();
 ?>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Simple LMS</title>
+<meta charset="UTF-8">
+<title>Real LMS</title>
+<link rel="stylesheet" href="assets/css/landing.css">
 </head>
 <body>
-  <h1>Welcome to the LMS</h1>
-  <ul>
-    <li><a href="admin/">Admin</a></li>
-    <li><a href="instructor/">Instructor</a></li>
-    <li><a href="student/">Student</a></li>
-  </ul>
+
+<!-- HEADER -->
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">RL</div>
+    <div>
+      <h1>Real LMS</h1>
+      <p>Institute Learning Management System</p>
+    </div>
+  </div>
+  <nav>
+    <a href="#login">Login</a>
+  </nav>
+</header>
+
+<!-- LOGIN CARDS SECTION -->
+<section class="login-section" id="login">
+  <div class="login-container">
+
+    <div class="login-card">
+      <span class="badge">Admin</span>
+      <h3>Login as Admin</h3>
+      <p>Manage users, courses and system settings.</p>
+      <a href="admin/login.php">Login →</a>
+    </div>
+
+    <div class="login-card active">
+      <span class="badge">Student</span>
+      <h3>Login as Student</h3>
+      <p>Access courses, assignments and results.</p>
+      <a href="student_login.php">Login →</a>
+    </div>
+
+    <div class="login-card">
+      <span class="badge">Teacher</span>
+      <h3>Login as Teacher</h3>
+      <p>Upload content and manage classes.</p>
+ <a href="instructor/login.php">Login →</a>
+
+
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  © <?php echo date('Y'); ?> Real LMS
+</footer>
+
 </body>
 </html>

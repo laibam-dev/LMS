@@ -1,11 +1,12 @@
 <?php
-$host = 'localhost';
-$db   = 'lms';
-$user = 'root';
-$pass = '';
+$host = "localhost";
+$user = "root";
+$password = "";
+$dbname = "lms";  // <-- change this from 'polymath_lms' to 'lms'
 
-$conn = new mysqli($host, $user, $pass, $db);
-if ($conn->connect_error) {
+$conn = new mysqli($host, $user, $password, $dbname);
+
+if($conn->connect_error){
     die("Connection failed: " . $conn->connect_error);
 }
 ?>

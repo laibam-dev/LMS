@@ -1,32 +1,44 @@
 <?php
 session_start();
-include "../config/db.php";
+require_once "../config/db.php";
 
-/* Safety check */
-if (!isset($_POST['email']) || !isset($_POST['password'])) {
-    die("Form data missing");
-}
+if (isset($_POST['login'])) {
 
-$email = mysqli_real_escape_string($conn, $_POST['email']);
-$password = $_POST['password'];
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
 
-/* Query */
-$sql = "SELECT * FROM users WHERE email='$email' AND role='instructor'";
-$result = mysqli_query($conn, $sql);
+    if ($email == "" || $password == "") {
+        header("Location: login.php?error=empty");
+        exit;
+    }
 
-if ($result && mysqli_num_rows($result) === 1) {
-    $user = mysqli_fetch_assoc($result);
+    // IMPORTANT: users table + role = teacher
+    $sql = "SELECT * FROM users WHERE email = ? AND role = 'teacher' LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if (password_verify($password, $user['password_hash'])) {
+    if ($result->num_rows === 1) {
+        $row = $result->fetch_assoc();
 
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['role'] = $user['role'];
-        $_SESSION['name'] = $user['name'];
-        $_SESSION['email'] = $user['email'];
+        // Password verify
+        if (password_verify($password, $row['password'])) {
 
-        header("Location: index.php");
+            // Instructor session
+            $_SESSION['instructor_id']   = $row['id'];
+            $_SESSION['instructor_name'] = $row['name'];
+
+            header("Location: index.php");
+            exit;
+
+        } else {
+            header("Location: login.php?error=invalid");
+            exit;
+        }
+
+    } else {
+        header("Location: login.php?error=invalid");
         exit;
     }
 }
-
-echo "Invalid email or password";
