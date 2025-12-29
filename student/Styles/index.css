@@ -1,17 +1,203 @@
-body{ font-family: Arial, sans-serif;
-     margin:0; padding:0;
-     background:#f2f2f2; } 
-.container{ width:90%; margin:20px auto; }
- .section{ background:#fff; padding:20px; 
-    margin-bottom:20px;
-     border-radius:8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-      h2{ margin-top:0; }
-       .card{ display:inline-block;
-         width:200px; margin:10px; padding:15px;
-          background:#e8f0fe; border-radius:8px;
-           text-align:center; } .button{ display:inline-block;
-             padding:10px 20px; background:#007bff; 
-             color:#fff; text-decoration:none; 
-             border-radius:5px; margin:5px 0; } 
-             .button:hover{ background:#0056b3; } 
-             .greeting{ font-size:18px; }
+/* RESET */
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#f3f4f6;
+}
+
+/* ================= MAIN DASHBOARD ================= */
+
+.dashboard-container{
+    display:flex;
+    min-height:100vh;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    margin-top: 30px;
+    margin-left: 20px;
+    width:260px;
+        background:linear-gradient(135deg,#1e40af,#1e40af);
+    color:#fff;
+    padding:20px;
+    border-radius: 8px;
+}
+
+.profile-box{
+    margin-top: 30px;
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.profile-img{
+    margin-top: 40px;
+    width:90px;
+    height:90px;
+    background:#e5e7eb;
+    border-radius:50%;
+    margin:0 auto 12px;
+}
+
+.profile-box h3{
+    margin-top: 10px;
+    margin:5px 0;
+    font-size:18px;
+}
+
+.profile-box p{
+    margin-top: 20px;
+    font-size:13px;
+    color:#d1d5db;
+}
+
+.btn{
+    margin-top: 20px;
+    display:block;
+    
+    padding:8px;
+    background:white;
+    color:#000;
+    text-decoration:none;
+    border-radius:6px;
+    font-weight:bold;
+}
+
+/* SIDEBAR MENU */
+.sidebar-menu{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+
+.sidebar-menu li{
+    padding:12px;
+    margin-bottom:6px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.sidebar-menu li:hover{
+    background:#1f2937;
+}
+
+/* ================= MAIN CONTENT ================= */
+
+.main-content{
+    flex:1;
+    padding:30px;
+}
+
+/* ================= WELCOME CARD ================= */
+
+.welcome-card{
+    background:linear-gradient(135deg,#1e40af,#1e40af);
+    color:#fff;
+    padding:25px;
+    border-radius:14px;
+    margin-bottom:30px;
+    
+}
+
+.welcome-card h2{
+    
+    margin:0 0 6px 0;
+    font-size:24px;
+    display: flex;
+    text-align: center;
+}
+
+/* ================= SECTIONS ================= */
+
+.section{
+    background:#fff;
+    padding:20px;
+    border-radius:14px;
+    margin-bottom:30px;
+}
+
+.section h2{
+    margin-top:0;
+}
+
+/* ================= CARDS ================= */
+
+.cards-row{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.card{
+    background:#ffffff;
+    width:250px;
+    padding:20px;
+    border-radius:14px;
+    box-shadow:0 6px 12px rgba(0,0,0,0.08);
+    transition:0.3s ease;
+}
+
+.card h4,
+.card h3{
+    margin-top:5px
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+
+.card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 2px solid #007bff; /* Blue border added */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2); /* Hover shadow */
+    border-color: #0056b3; /* Darker blue on hover */
+}
+
+
+/* ================= BUTTON ================= */
+
+.button{
+    display:inline-block;
+    margin-top:12px;
+    padding:8px 16px;
+    background:#2563eb;
+    color:#fff;
+    text-decoration:none;
+    border-radius:6px;
+    font-size:14px;
+}
+
+.button:hover{
+    background:#1e40af;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width: 900px){
+    .dashboard-container{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        text-align:center;
+    }
+
+    .cards-row{
+        justify-content:center;
+    }
+}
