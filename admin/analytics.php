@@ -1,70 +1,63 @@
 <?php
-session_start();
-include "../config/db.php";
+include 'session.php';       // Session check
+include 'header.php';
+include 'sidebar.php';
+include '../config/db.php';
 
-// login protection
-if (!isset($_SESSION['admin'])) {
-    header("Location: login.php");
-    exit();
+// Fetch total counts
+$total_users = $conn->query("SELECT COUNT(*) as total FROM users")->fetch_assoc()['total'];
+$total_students = $conn->query("SELECT COUNT(*) as total FROM users WHERE role='student'")->fetch_assoc()['total'];
+$total_instructors = $conn->query("SELECT COUNT(*) as total FROM users WHERE role='instructor'")->fetch_assoc()['total'];
+
+// Monthly registrations data
+$monthly = [];
+for($i=1; $i<=12; $i++){
+    $month_data = $conn->query("SELECT COUNT(*) as total FROM users WHERE MONTH(created_at)=$i")->fetch_assoc()['total'];
+    $monthly[] = $month_data;
 }
-
-// analytics queries
-$totalUsers = mysqli_fetch_assoc(
-    mysqli_query($conn, "SELECT COUNT(*) AS total FROM users")
-)['total'];
-
-$totalStudents = mysqli_fetch_assoc(
-    mysqli_query($conn, "SELECT COUNT(*) AS total FROM users WHERE role='student'")
-)['total'];
-
-$totalInstructors = mysqli_fetch_assoc(
-    mysqli_query($conn, "SELECT COUNT(*) AS total FROM users WHERE role='instructor'")
-)['total'];
-
-$totalCourses = mysqli_fetch_assoc(
-    mysqli_query($conn, "SELECT COUNT(*) AS total FROM courses")
-)['total'];
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Admin Analytics</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
 
-<h2>Analytics</h2>
+<div style="margin-left:220px; padding:20px;">
+    <h2>Analytics Dashboard</h2>
+    
+    <div class="card">
+        <h3><?php echo $total_users; ?></h3>
+        <p>Total Users</p>
+    </div>
+    <div class="card">
+        <h3><?php echo $total_students; ?></h3>
+        <p>Total Students</p>
+    </div>
+    <div class="card">
+        <h3><?php echo $total_instructors; ?></h3>
+        <p>Total Instructors</p>
+    </div>
+    
+    <h3>Monthly Registrations</h3>
+    <canvas id="monthlyChart" style="background:#fff; padding:20px; border-radius:10px;"></canvas>
+</div>
 
-<p>Total Users: <b><?= $totalUsers ?></b></p>
-<p>Total Students: <b><?= $totalStudents ?></b></p>
-<p>Total Instructors: <b><?= $totalInstructors ?></b></p>
-<p>Total Courses: <b><?= $totalCourses ?></b></p>
-
-<hr>
-
-<canvas id="analyticsChart" width="300"></canvas>
-
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-const ctx = document.getElementById('analyticsChart');
-
-new Chart(ctx, {
-    type: 'pie',
+var ctx = document.getElementById('monthlyChart').getContext('2d');
+var monthlyChart = new Chart(ctx, {
+    type: 'bar',
     data: {
-        labels: ['Students', 'Instructors'],
+        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
         datasets: [{
-            data: [<?= $totalStudents ?>, <?= $totalInstructors ?>]
+            label: 'Registrations',
+            data: <?php echo json_encode($monthly); ?>,
+            backgroundColor: 'rgba(64,115,158,0.7)',
+            borderColor: 'rgba(64,115,158,1)',
+            borderWidth: 1
         }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: { beginAtZero: true }
+        }
     }
 });
 </script>
-
-<br>
-<a href="index.php">⬅ Back to Dashboard</a>
-
-<link rel="stylesheet" href="../assets/css/admin.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="../assets/js/chart.js"></script>
-
-
-</body>
-</html>
