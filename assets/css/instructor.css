@@ -52,7 +52,7 @@ body {
 
 /* ========== Buttons ========== */
 .btn-primary {
-    width: 100%;
+    
     padding: 10px;
     background-color: #0d6efd;
     color: #fff;
@@ -254,4 +254,33 @@ body{ background:var(--bg); color:var(--text); }
     border-radius: 8px;
     font-weight: 500;
 }
+
+#assignments .btn.btn-primary {
+    width: auto !important;
+    padding: 8px 18px;
+    border-radius: 10px;
+}
+
+.assignment-head,
+#assignments .d-flex.justify-content-between {
+    align-items: center;
+}
+/* ===== FIX QUIZ + ENROLL BUTTON WIDTH ===== */
+
+#quizzes .btn,
+#students .btn,
+.quiz-header .btn {
+    width: auto !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;
+    border-radius: 10px;
+}
+
+/* Safety: never allow full width primary buttons */
+.btn-primary {
+    width: auto;
+}
+
 

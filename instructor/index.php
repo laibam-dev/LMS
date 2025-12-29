@@ -1,4 +1,14 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['instructor_id'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
+
+
+<?php
 // header + session check
 include "../config/db.php";
 include "header.php";
