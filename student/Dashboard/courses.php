@@ -13,12 +13,12 @@ if (!isset($_GET['course_id'])) {
 }
 $course_id = $_GET['course_id'];
 
-
+// Database connection update
 $check = $conn->prepare("
-    SELECT c.id, c.title, c.description, se.progress
-    FROM student_enrollment se
-    JOIN course c ON se.course_id = c.id
-    WHERE se.student_id = ? AND se.course_id = ?
+    SELECT c.id, c.title, c.description, e.progress
+    FROM enrollments e
+    JOIN courses c ON e.course_id = c.id
+    WHERE e.user_id = ? AND e.course_id = ?
 ");
 $check->bind_param("ii", $student_id, $course_id);
 $check->execute();
@@ -29,7 +29,7 @@ if ($result->num_rows == 0) {
 }
 $course = $result->fetch_assoc();
 
-
+// Lessons fetch
 $lesson_stmt = $conn->prepare("SELECT * FROM lessons WHERE course_id = ?");
 $lesson_stmt->bind_param("i", $course_id);
 $lesson_stmt->execute();
@@ -39,91 +39,106 @@ while($row = $lesson_result->fetch_assoc()){
     $lessons[] = $row;
 }
 
-
-$completed_stmt = $conn->prepare("SELECT lesson_id FROM lesson_completion WHERE student_id = ?");
-$completed_stmt->bind_param("i", $_SESSION['student_id']);
-$completed_stmt->execute();
-$completed_lessons_result = $completed_stmt->get_result();
-$completed_lessons = [];
-while($row = $completed_lessons_result->fetch_assoc()){
-    $completed_lessons[] = $row['lesson_id'];
-}
-
-
+// Alag se Assignments aur Quizzes fetch karna
 $assess_stmt = $conn->prepare("SELECT * FROM assessments WHERE course_id = ?");
 $assess_stmt->bind_param("i", $course_id);
 $assess_stmt->execute();
 $assess_result = $assess_stmt->get_result();
-$assessments = [];
-while($row = $assess_result->fetch_assoc()){
-    $assessments[] = $row;
-}
+$assignments = [];
+$quizzes = [];
 
+while($row = $assess_result->fetch_assoc()){
+    if($row['type'] == 'assignment'){
+        $assignments[] = $row;
+    } else {
+        $quizzes[] = $row;
+    }
+}
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title><?= $course['title']; ?></title>
+    <title><?= htmlspecialchars($course['title']); ?></title>
     <link rel="stylesheet" href="../Styles/courses.css">
+    <style>
+        .video-container, .assess-box { margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9; }
+        iframe { width: 100%; height: 350px; border-radius: 5px; }
+        .btn-small { padding: 5px 10px; background: #28a745; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; }
+        .quiz-btn { background: #007bff; }
+    </style>
 </head>
-
 <body>
 
 <?php include '../navbar.php'; ?>
+
 <div class="container">
-
-    
     <div class="section">
-        <h2><?= $course['title']; ?></h2>
-        <p><strong>Progress:</strong> <?= $course['progress']; ?>%</p>
-        <p><?= $course['description']; ?></p>
+        <h1><?= htmlspecialchars($course['title']); ?></h1>
+        <p><strong>Your Progress:</strong> <?= $course['progress']; ?>%</p>
+        <p><?= htmlspecialchars($course['description']); ?></p>
     </div>
 
-
-
-<div class="section">
-    <h2>Videos / Lessons</h2>
-    <?php if(!empty($lessons)): ?>
-    <ul>
-        <?php foreach($lessons as $lesson): ?>
-            <li><?= htmlspecialchars($lesson['title']); ?></li>
-          <li><?= htmlspecialchars($lesson['video_url']); ?></li>
-           <?php if(in_array($lesson['id'], $completed_lessons)): ?>
-    <span>Completed ✅</span>
-<?php else: ?>
-    <form method="POST" action="complete_lesson.php">
-        <input type="hidden" name="lesson_id" value="<?= $lesson['id'] ?>">
-        <input type="hidden" name="course_id" value="<?= $course_id ?>">
-        <button type="submit">Mark as Complete</button>
-    </form>
-<?php endif; ?>
-        <?php endforeach; ?>
-    </ul>
-    <?php else: ?>
-        <p>No lessons added yet.</p>
-    <?php endif; ?>
-</div>
-
-
-<div class="section">
-    <h2>Assessments</h2>
-    <?php if(!empty($assessments)): ?>
-        <ul>
-        <?php foreach($assessments as $assess): ?>
-            <li><?= ucfirst($assess['type']) . ": " . htmlspecialchars($assess['title']); ?></li>
-        <?php endforeach; ?>
-        </ul>
-    <?php else: ?>
-        <p>No assessments added yet.</p>
-    <?php endif; ?>
-</div>
-
-    
     <div class="section">
-        <a href="index.php" class="button">Back to Dashboard</a>
+        <h2>🎥 Video Lectures</h2>
+        <?php if(!empty($lessons)): ?>
+            <?php foreach($lessons as $lesson): ?>
+                <div class="video-container">
+                    <h3><?= htmlspecialchars($lesson['title']); ?></h3>
+                    <?php if(!empty($lesson['video_url'])): ?>
+                        <?php 
+                            $video_id = explode("v=", $lesson['video_url'])[1] ?? '';
+                            if($video_id) {
+                                echo '<iframe src="https://www.youtube.com/embed/'.$video_id.'" frameborder="0" allowfullscreen></iframe>';
+                            }
+                        ?>
+                    <?php endif; ?>
+                    <br><br>
+                    <form method="POST" action="complete_lesson.php">
+                        <input type="hidden" name="lesson_id" value="<?= $lesson['id'] ?>">
+                        <button type="submit" class="button">Mark as Completed</button>
+                    </form>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No lessons yet.</p>
+        <?php endif; ?>
     </div>
 
+    <hr>
+
+    <div class="section">
+        <h2>📝 Assignments</h2>
+        <?php if(!empty($assignments)): ?>
+            <?php foreach($assignments as $assign): ?>
+                <div class="assess-box">
+                    <h4><?= htmlspecialchars($assign['title']); ?></h4>
+                    <p>Deadline: <?= $assign['due_date'] ?? 'No deadline'; ?></p>
+                    <a href="submit_assignment.php?id=<?= $assign['id'] ?>" class="btn-small">Upload Assignment</a>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No assignments posted by instructor.</p>
+        <?php endif; ?>
+    </div>
+
+    <div class="section">
+        <h2>❓ Quizzes</h2>
+        <?php if(!empty($quizzes)): ?>
+            <?php foreach($quizzes as $quiz): ?>
+                <div class="assess-box">
+                    <h4><?= htmlspecialchars($quiz['title']); ?></h4>
+                    <a href="take_quiz.php?id=<?= $quiz['id'] ?>" class="btn-small quiz-btn">Start Quiz</a>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No quizzes available yet.</p>
+        <?php endif; ?>
+    </div>
+
+    <div class="section">
+        <a href="index.php" class="button" style="background: #666;">Back to Dashboard</a>
+    </div>
 </div>
 
 </body>
