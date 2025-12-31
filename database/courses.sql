@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 31, 2025 at 09:19 AM
+-- Generation Time: Dec 31, 2025 at 01:32 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,13 +43,13 @@ CREATE TABLE `courses` (
 --
 
 INSERT INTO `courses` (`id`, `instructor_id`, `title`, `subject`, `description`, `created_at`, `updated_at`, `status`) VALUES
-(1, 1, 'introduction to computer technology', NULL, 'CS', '2025-12-26 16:05:34', '2025-12-27 20:47:32', 'draft'),
-(2, 1, 'calculus', NULL, '', '2025-12-27 18:27:18', '2025-12-27 20:10:35', 'draft'),
-(3, 1, 'computer', 'advance programming', '', '2025-12-27 20:10:25', '2025-12-27 20:47:28', 'published'),
-(4, 1, 'english', '', '', '2025-12-28 10:33:37', '2025-12-28 10:34:05', 'published'),
-(5, 1, 'programming fundamental', '', '', '2025-12-28 11:13:23', '2025-12-28 13:42:32', 'published'),
-(6, 1, 'math', '', '', '2025-12-28 17:56:35', '2025-12-28 17:56:35', 'draft'),
-(7, 1, 'pom', '', '', '2025-12-29 12:21:15', '2025-12-29 12:21:25', 'published');
+(1, 2, 'introduction to computer technology', NULL, 'CS', '2025-12-26 16:05:34', '2025-12-31 11:46:17', 'draft'),
+(2, 2, 'calculus', NULL, '', '2025-12-27 18:27:18', '2025-12-31 11:46:17', 'draft'),
+(3, 2, 'computer', 'advance programming', '', '2025-12-27 20:10:25', '2025-12-31 11:46:17', 'published'),
+(4, 2, 'english', '', '', '2025-12-28 10:33:37', '2025-12-31 11:46:17', 'published'),
+(5, 2, 'programming fundamental', '', '', '2025-12-28 11:13:23', '2025-12-31 11:46:17', 'published'),
+(6, 2, 'math', '', '', '2025-12-28 17:56:35', '2025-12-31 11:46:17', 'draft'),
+(7, 2, 'pom', '', '', '2025-12-29 12:21:15', '2025-12-31 11:46:17', 'published');
 
 --
 -- Indexes for dumped tables
