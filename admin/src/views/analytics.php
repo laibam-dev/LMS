@@ -1,32 +1,28 @@
-<?php
-require_once __DIR__ . '/../../db/db_connection.php';
-require_once __DIR__ . '/../middleware/auth.php';
+<?php $title = 'Analytics'; include 'includes/header.php'; ?>
 
-$admin = $_SESSION['user'] ?? null;
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white rounded-lg border p-4 shadow-sm">
+        <h3 class="text-sm font-medium mb-2">Student vs Instructor Registrations</h3>
+        <canvas id="roleCountsChart" style="height:220px"></canvas>
+      </div>
 
-ob_start();
-?>
-<div>
-  <div class="flex items-center justify-between mb-6">
-    <div>
-      <h1 class="text-2xl font-semibold">Analytics</h1>
-      <p class="text-sm text-slate-500">Platform metrics</p>
-    </div>
-  </div>
-
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <div class="bg-white rounded-lg border p-4 shadow-sm">
-      <h3 class="text-sm font-medium mb-2">Student vs Instructor Registrations</h3>
-      <canvas id="roleCountsChart" style="height:220px"></canvas>
+      <div class="bg-white rounded-lg border p-4 shadow-sm">
+        <h3 class="text-sm font-medium mb-2">Enrollments (last 12 months)</h3>
+        <canvas id="enrollmentsChart" style="height:220px"></canvas>
+      </div>
     </div>
 
-    <div class="bg-white rounded-lg border p-4 shadow-sm">
-      <h3 class="text-sm font-medium mb-2">Enrollments (last 12 months)</h3>
-      <canvas id="enrollmentsChart" style="height:220px"></canvas>
+    <div class="mt-6 bg-white rounded-lg border p-4 shadow-sm">
+      <h3 class="text-lg font-semibold mb-3">Student Signups (last 12 months)</h3>
+      <canvas id="monthlyStudentsChart" style="height:240px"></canvas>
     </div>
-  </div>
+
+  </main>
+</div>
 
   <script>
+    if (window.lucide) lucide.replace();
+
     (async()=>{
       try{
         const r = await fetch('/LMS/admin/src/controllers/UsersController.php?action=role_counts',{credentials:'same-origin'});
@@ -48,9 +44,29 @@ ob_start();
         }
       }catch(e){console.error(e)}
     })();
+
+    // monthly students chart
+    (async()=>{
+      try{
+        const r = await fetch('/LMS/admin/src/controllers/UsersController.php?action=monthly_students',{credentials:'same-origin'});
+        const j = await r.json();
+        if (j.ok) {
+          const ctx = document.getElementById('monthlyStudentsChart').getContext('2d');
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: j.data.labels,
+              datasets: [{ label: 'New Students', data: j.data.data, backgroundColor: 'rgba(79,70,229,0.9)' }]
+            },
+            options: {
+              responsive: true,
+              plugins: { legend: { display: false } },
+              scales: { y: { beginAtZero: true } }
+            }
+          });
+        }
+      } catch(e) { console.error(e); }
+    })();
   </script>
-</div>
-<?php
-$content = ob_get_clean();
-$title = 'Analytics';
-require __DIR__ . '/layout.php';
+</body>
+</html>

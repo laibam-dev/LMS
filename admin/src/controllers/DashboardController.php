@@ -73,7 +73,8 @@ class DashboardController
 
     private function fetchRecentUsers(int $limit = 5): array
     {
-        $stmt = $this->db->prepare('SELECT id, name, email, role, status, created_at FROM users ORDER BY created_at DESC LIMIT :lim');
+        // avoid relying on created_at column; order by id instead
+        $stmt = $this->db->prepare('SELECT id, name, email, role, status FROM users ORDER BY id DESC LIMIT :lim');
         $stmt->bindValue(':lim', $limit, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

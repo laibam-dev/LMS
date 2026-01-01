@@ -52,6 +52,16 @@ switch ($path) {
         $ctrl->show();
         break;
 
+    case '/settings':
+        require_once __DIR__ . '/src/middleware/auth.php';
+        $admin = $_SESSION['user'] ?? null;
+        ob_start();
+        require __DIR__ . '/src/views/settings.php';
+        $content = ob_get_clean();
+        $title = 'Settings';
+        require __DIR__ . '/src/views/layout.php';
+        break;
+
     case '/login':
         require_once __DIR__ . '/src/controllers/LoginController.php';
         $ctrl = new LoginController();

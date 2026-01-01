@@ -1,11 +1,12 @@
 <?php
-<?php
 declare(strict_types=1);
 
 require_once __DIR__ . '/../../db/db_connection.php';
 require_once __DIR__ . '/../middleware/auth.php'; // ensures admin session
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 class ProfileController
 {
@@ -97,6 +98,47 @@ class ProfileController
         }
     }
 
+    public function update_settings(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405); exit;
+        }
+
+        // simple CSRF
+        $csrf = $_POST['csrf'] ?? '';
+        if (!hash_equals((string)($_SESSION['csrf_profile'] ?? ''), (string)$csrf)) {
+            $_SESSION['flash_profile'] = 'Invalid request.';
+            header('Location: /LMS/admin/settings');
+            exit;
+        }
+
+        $name = trim((string)($_POST['name'] ?? ''));
+        $email = trim((string)($_POST['email'] ?? ''));
+
+        if ($name === '' || $email === '') {
+            $_SESSION['flash_profile'] = 'Name and email required.';
+            header('Location: /LMS/admin/settings');
+            exit;
+        }
+
+        try {
+            $stmt = $this->db->prepare('UPDATE users SET name = :name, email = :email, updated_at = NOW() WHERE id = :id');
+            $stmt->execute([':name' => $name, ':email' => $email, ':id' => $this->userId]);
+
+            // update session
+            $_SESSION['user']['name'] = $name;
+            $_SESSION['user']['email'] = $email;
+
+            $_SESSION['flash_profile'] = 'Settings saved.';
+            header('Location: /LMS/admin/settings');
+            exit;
+        } catch (Throwable $e) {
+            $_SESSION['flash_profile'] = 'Update failed.';
+            header('Location: /LMS/admin/settings');
+            exit;
+        }
+    }
+
     private function handleAvatarUpload(array $file): ?string
     {
         if ($file['error'] !== UPLOAD_ERR_OK) return null;
@@ -128,5 +170,6 @@ if (php_sapi_name() !== 'cli' && basename(__FILE__) === basename($_SERVER['SCRIP
     $ctrl = new ProfileController();
     $action = $_REQUEST['action'] ?? 'show';
     if ($action === 'update') $ctrl->update();
+    elseif ($action === 'update_settings') $ctrl->update_settings();
     else $ctrl->show();
 }

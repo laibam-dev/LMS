@@ -1,5 +1,5 @@
 <?php
-<?php
+
 require_once __DIR__ . '/../middleware/auth.php';
 session_start();
 $flash = $_SESSION['flash_profile'] ?? null;

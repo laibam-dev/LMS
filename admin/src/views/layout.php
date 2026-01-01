@@ -135,7 +135,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error'], $_SESSION['flash_inf
 
             <div id="profileMenu" class="hidden absolute right-0 mt-2 w-44 bg-white border border-slate-200 rounded-md shadow-lg py-2 z-50">
               <a href="/LMS/admin/profile" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">My Profile</a>
-              <a href="/LMS/admin/src/views/settings.php" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">Settings</a>
+              <a href="/LMS/admin/settings" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">Settings</a>
               <form method="POST" action="/LMS/admin/logout" class="m-0">
                 <button type="submit" class="w-full text-left px-4 py-2 text-sm text-rose-600 hover:bg-slate-50">Logout</button>
               </form>
