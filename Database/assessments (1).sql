@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 28, 2025 at 12:31 PM
+-- Generation Time: Dec 31, 2025 at 02:56 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,26 +29,23 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `assessments` (
   `id` int(11) NOT NULL,
-  `course_id` int(11) NOT NULL,
-  `type` enum('quiz','exam') NOT NULL,
+  `course_id` int(10) UNSIGNED NOT NULL,
+  `instructor_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `total_marks` int(11) DEFAULT 100,
+  `type` enum('assignment','quiz') NOT NULL DEFAULT 'assignment',
+  `instructions` text DEFAULT NULL,
+  `due_date` date DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `assessments`
 --
 
-INSERT INTO `assessments` (`id`, `course_id`, `type`, `title`, `total_marks`, `created_at`) VALUES
-(1, 1, 'quiz', 'Quiz 1: Deep Learning Basics', 100, '2025-12-27 04:42:48'),
-(2, 1, 'exam', 'Final Exam: Deep Learning', 100, '2025-12-27 04:42:48'),
-(3, 2, 'quiz', 'Quiz 1: Parallel Computing', 100, '2025-12-27 04:42:48'),
-(4, 2, 'exam', 'Final Exam: Parallel & Distributed Computing', 100, '2025-12-27 04:42:48'),
-(5, 3, 'quiz', 'Quiz 1: Marketing Basics', 100, '2025-12-27 04:42:49'),
-(6, 3, 'exam', 'Final Exam: Marketing', 100, '2025-12-27 04:42:49'),
-(7, 4, 'quiz', 'Quiz 1: Compiler Basics', 100, '2025-12-27 04:42:49'),
-(8, 4, 'exam', 'Final Exam: Compiler Construction', 100, '2025-12-27 04:42:49');
+INSERT INTO `assessments` (`id`, `course_id`, `instructor_id`, `title`, `type`, `instructions`, `due_date`, `created_at`) VALUES
+(1, 1, 1, 'Computer Basics Quiz', 'quiz', NULL, '2026-01-10', '2025-12-31 13:08:23'),
+(2, 2, 1, 'Calculus Assignment 1', 'assignment', NULL, '2026-01-15', '2025-12-31 13:08:23'),
+(3, 4, 1, 'English Grammar Test', 'quiz', NULL, '2026-01-20', '2025-12-31 13:08:23');
 
 --
 -- Indexes for dumped tables
@@ -59,7 +56,7 @@ INSERT INTO `assessments` (`id`, `course_id`, `type`, `title`, `total_marks`, `c
 --
 ALTER TABLE `assessments`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `course_id` (`course_id`);
+  ADD KEY `fk_assess_course` (`course_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -69,7 +66,7 @@ ALTER TABLE `assessments`
 -- AUTO_INCREMENT for table `assessments`
 --
 ALTER TABLE `assessments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -79,7 +76,7 @@ ALTER TABLE `assessments`
 -- Constraints for table `assessments`
 --
 ALTER TABLE `assessments`
-  ADD CONSTRAINT `assessments_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_assess_course` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

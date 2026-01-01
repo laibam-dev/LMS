@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 31, 2025 at 09:19 AM
+-- Generation Time: Dec 31, 2025 at 01:32 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -28,12 +28,23 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `enrollments` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(11) NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `course_id` int(10) UNSIGNED NOT NULL,
-  `enrolled_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `status` enum('active','completed','dropped') NOT NULL DEFAULT 'active'
+  `progress` int(3) DEFAULT 0,
+  `status` enum('active','completed') DEFAULT 'active',
+  `enrolled_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `enrollments`
+--
+
+INSERT INTO `enrollments` (`id`, `user_id`, `course_id`, `progress`, `status`, `enrolled_at`) VALUES
+(1, 3, 1, 25, 'active', '2025-12-31 12:09:50'),
+(2, 3, 2, 50, 'active', '2025-12-31 12:09:50'),
+(3, 3, 3, 0, 'active', '2025-12-31 12:09:50'),
+(4, 3, 7, 0, 'active', '2025-12-31 12:23:37');
 
 --
 -- Indexes for dumped tables
@@ -44,9 +55,8 @@ CREATE TABLE `enrollments` (
 --
 ALTER TABLE `enrollments`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uniq_user_course` (`user_id`,`course_id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `course_id` (`course_id`);
+  ADD KEY `fk_user_enroll` (`user_id`),
+  ADD KEY `fk_course_enroll` (`course_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -56,7 +66,7 @@ ALTER TABLE `enrollments`
 -- AUTO_INCREMENT for table `enrollments`
 --
 ALTER TABLE `enrollments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -66,8 +76,8 @@ ALTER TABLE `enrollments`
 -- Constraints for table `enrollments`
 --
 ALTER TABLE `enrollments`
-  ADD CONSTRAINT `fk_enrollments_course` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_enrollments_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_course_enroll` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_user_enroll` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

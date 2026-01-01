@@ -11,11 +11,12 @@ include '../navbar.php';
 
 $student_id = $_SESSION['student_id'];
 
+// --- UPDATE 1: Yahan 'user_id' aur 'progress' add kiya hai ---
 $sql = "
-SELECT c.id, c.title, c.description, c.image, se.progress
-FROM course c
-JOIN student_enrollment se ON c.id = se.course_id
-WHERE se.student_id = ?
+SELECT c.id, c.title, e.progress
+FROM courses c
+JOIN enrollments e ON c.id = e.course_id
+WHERE e.user_id = ?
 ";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $student_id);
@@ -48,8 +49,6 @@ $overall_progress = ($course_count > 0)
 <body>
 
 <div class="dashboard-container">
-
-    <!-- LEFT SIDEBAR -->
     <div class="sidebar">
         <div class="profile-box">
             <div class="profile-img"></div>
@@ -57,22 +56,41 @@ $overall_progress = ($course_count > 0)
             <p><?php echo htmlspecialchars($_SESSION['student_email']); ?></p>
             <a href="profile.php" class="btn">Update Profile</a>
         </div>
-
-    
     </div>
 
-    
     <div class="main-content">
-
-        
         <div class="welcome-card">
             <h2>Welcome, <?php echo htmlspecialchars($_SESSION['student_name']); ?> 👋</h2>
             <p>Here is your dashboard overview</p>
         </div>
 
         <div class="section">
-            <h2>My Courses</h2>
+            <h2>Available Courses to Join</h2>
+            <div class="cards-row">
+                <?php
+                // --- UPDATE 2: Yahan bhi 'user_id' check hoga ---
+                $all_sql = "SELECT * FROM courses WHERE id NOT IN (SELECT course_id FROM enrollments WHERE user_id = ?)";
+                $all_stmt = $conn->prepare($all_sql);
+                $all_stmt->bind_param("i", $student_id);
+                $all_stmt->execute();
+                $all_res = $all_stmt->get_result();
+                
+                if($all_res->num_rows > 0){
+                    while($c = $all_res->fetch_assoc()){
+                        echo '<div class="card">';
+                        echo '<h4>'.htmlspecialchars($c['title']).'</h4>';
+                        echo '<p>'.htmlspecialchars($c['subject']).'</p>';
+                        // Join button enroll_process.php ki taraf le jayega
+                        echo '<a href="enroll_process.php?course_id='.$c['id'].'" class="button">Join Course</a>';
+                        echo '</div>';
+                    }
+                } else { echo "<p>No new courses available.</p>"; }
+                ?>
+            </div>
+        </div>
 
+        <div class="section">
+            <h2>My Enrolled Courses</h2>
             <?php if(!empty($courses)): ?>
                 <div class="cards-row">
                     <?php foreach($courses as $course): ?>
@@ -90,32 +108,19 @@ $overall_progress = ($course_count > 0)
             <?php endif; ?>
         </div>
 
-    
         <div class="cards-row">
             <div class="card">
                 <h3>Analytics</h3>
                 <p>Overall progress: <?php echo $overall_progress; ?>%</p>
                 <a href="analytics.php" class="button">View Analytics</a>
             </div>
-
             <div class="card">
                 <h3>Certificates</h3>
                 <p>View your completed certificates</p>
                 <a href="certificates.php" class="button">View Certificates</a>
             </div>
         </div>
-
-    
-        <div class="section">
-            <h2>Achievements</h2>
-            <div class="cards-row">
-                <div class="card">Badge 1</div>
-                <div class="card">Badge 2</div>
-            </div>
-        </div>
-
     </div>
 </div>
-
 </body>
 </html>

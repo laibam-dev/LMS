@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 28, 2025 at 12:33 PM
+-- Generation Time: Dec 31, 2025 at 03:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,57 +24,56 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `lesson_completion`
+-- Table structure for table `certificates`
 --
 
-CREATE TABLE `lesson_completion` (
+CREATE TABLE `certificates` (
   `id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
-  `lesson_id` int(11) NOT NULL,
-  `completed_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `course_id` int(11) NOT NULL,
+  `issue_date` date DEFAULT NULL,
+  `status` enum('Generated','Pending') DEFAULT 'Pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `lesson_completion`
+-- Dumping data for table `certificates`
 --
 
-INSERT INTO `lesson_completion` (`id`, `student_id`, `lesson_id`, `completed_at`) VALUES
-(1, 3, 5, '2025-12-27 08:30:42'),
-(2, 3, 1, '2025-12-27 08:52:20'),
-(3, 3, 6, '2025-12-27 08:53:00');
+INSERT INTO `certificates` (`id`, `student_id`, `course_id`, `issue_date`, `status`) VALUES
+(2, 3, 2, '2025-12-27', 'Generated');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `lesson_completion`
+-- Indexes for table `certificates`
 --
-ALTER TABLE `lesson_completion`
+ALTER TABLE `certificates`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `student_id` (`student_id`),
-  ADD KEY `lesson_id` (`lesson_id`);
+  ADD KEY `fk_cert_student` (`student_id`),
+  ADD KEY `fk_cert_course` (`course_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `lesson_completion`
+-- AUTO_INCREMENT for table `certificates`
 --
-ALTER TABLE `lesson_completion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `certificates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `lesson_completion`
+-- Constraints for table `certificates`
 --
-ALTER TABLE `lesson_completion`
-  ADD CONSTRAINT `lesson_completion_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `account` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `lesson_completion_ibfk_2` FOREIGN KEY (`lesson_id`) REFERENCES `lessons` (`id`) ON DELETE CASCADE;
+ALTER TABLE `certificates`
+  ADD CONSTRAINT `fk_cert_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_cert_student` FOREIGN KEY (`student_id`) REFERENCES `account` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
