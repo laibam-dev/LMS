@@ -35,9 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if ($insert->execute()) {
     
-        echo "<div style='text-align:center; margin-top:50px; font-family:sans-serif;'>
+        echo "<div style='text-align:center; margin-top:50px;
+         font-family:sans-serif;'>
                 <h1 style='color:#28a745;'>Quiz Submitted!</h1>
-                <div style='font-size:20px; border:1px solid #ddd; display:inline-block; padding:20px; border-radius:10px;'>
+                <div style='font-size:20px; border:1px solid #ddd; 
+                display:inline-block; padding:20px; border-radius:10px;'>
                     <p>Total Questions: <b>$total_questions</b></p>
                     <p>Correct Answers: <b>$correct_count</b></p>
                     <p>Your Score: <b style='color:#007bff;'>$percentage%</b></p>

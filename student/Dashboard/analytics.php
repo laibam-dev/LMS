@@ -45,15 +45,16 @@ $overall_progress = ($course_count > 0) ? round($total_progress / $course_count)
     <title>Student Analytics</title>
     <link rel="stylesheet" href="../Styles/analytics.css">
     <style>
-        .container { max-width: 900px; margin: 30px auto; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .container { max-width: 900px; margin: 30px auto; padding: 20px; 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .section { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .progress-bar { width: 100%; background-color: #eee; border-radius: 20px; margin: 10px 0 25px 0; height: 25px; overflow: hidden; border: 1px solid #ddd; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #28a745, #34ce57); color: white; text-align: center; line-height: 25px; font-weight: bold; font-size: 14px; transition: width 0.8s ease-in-out; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #007bff, #007bff); color: white; text-align: center; line-height: 25px; font-weight: bold; font-size: 14px; transition: width 0.8s ease-in-out; }
         .overall-stats { background: #eef5ff; padding: 20px; border-radius: 10px; border-left: 6px solid #007bff; margin-bottom: 30px; }
         .overall-stats h3 { margin: 0; color: #0056b3; }
-        .course-title { font-size: 18px; font-weight: 600; color: #333; margin-bottom: 5px; }
-        .button-back { text-decoration: none; padding: 12px 25px; background: #6c757d; color: #fff; border-radius: 6px; display: inline-block; transition: background 0.3s; }
-        .button-back:hover { background: #5a6268; }
+        .course-title { font-size: 18px; font-weight: 600; color: black; margin-bottom: 5px; }
+        .button-back { text-decoration: none; padding: 12px 25px; background: #007bff; color: #fff; border-radius: 6px; display: inline-block; transition: background 0.3s; }
+        .button-back:hover { background: #007bff; }
     </style>
 </head>
 <body>

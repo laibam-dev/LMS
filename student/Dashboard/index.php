@@ -60,7 +60,7 @@ $overall_progress = ($course_count > 0)
 
     <div class="main-content">
         <div class="welcome-card">
-            <h2>Welcome, <?php echo htmlspecialchars($_SESSION['student_name']); ?> 👋</h2>
+            <h2>Welcome, <?php echo htmlspecialchars($_SESSION['student_name']); ?> </h2>
             <p>Here is your dashboard overview</p>
         </div>
 

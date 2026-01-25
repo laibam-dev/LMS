@@ -37,7 +37,7 @@ $questions = $questions_query->get_result();
         .question-box { margin-bottom: 25px; padding: 15px; border-bottom: 1px solid #eee; }
         .options label { display: block; margin: 10px 0; cursor: pointer; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
         .options input { margin-right: 10px; }
-        .submit-btn { background: #28a745; color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .submit-btn { background: #007bff; color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-size: 16px; }
     </style>
 </head>
 <body>
