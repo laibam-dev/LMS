@@ -106,7 +106,6 @@ if(!isset($_SESSION['student_id'])){
         <a href="Dashboard/courses.php" class="<?= basename($_SERVER['PHP_SELF']) == 'courses.php' ? 'active' : '' ?>">Courses</a>
         <a href="Dashboard/analytics.php" class="<?= basename($_SERVER['PHP_SELF']) == 'analytics.php' ? 'active' : '' ?>">Analytics</a>
         <a href="Dashboard/certificates.php" class="<?= basename($_SERVER['PHP_SELF']) == 'certificates.php' ? 'active' : '' ?>">Certificates</a>
-        <a href="Dashboard/achievements.php" class="<?= basename($_SERVER['PHP_SELF']) == 'achievements.php' ? 'active' : '' ?>">Achievements</a>
         <a href="../logout.php">Logout</a>
     </div>
 </nav>
