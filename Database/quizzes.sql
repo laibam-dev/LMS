@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 26, 2026 at 11:30 AM
+-- Generation Time: Jan 27, 2026 at 02:41 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,7 +41,7 @@ CREATE TABLE `quizzes` (
 --
 
 INSERT INTO `quizzes` (`id`, `course_id`, `title`, `total_marks`, `due_date`, `created_at`) VALUES
-(8, 13, 'ch1', 20, '2026-01-29', '2026-01-26 09:58:56');
+(1, 1, 'ch1', 20, '2026-01-29', '2026-01-26 09:58:56');
 
 --
 -- Indexes for dumped tables

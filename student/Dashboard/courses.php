@@ -13,7 +13,7 @@ if (!isset($_GET['course_id'])) {
 }
 $course_id = $_GET['course_id'];
 
-// Database connection update
+// Course enrollment check
 $check = $conn->prepare("
     SELECT c.id, c.title, c.description, e.progress
     FROM enrollments e
@@ -39,21 +39,17 @@ while($row = $lesson_result->fetch_assoc()){
     $lessons[] = $row;
 }
 
-// Alag se Assignments aur Quizzes fetch karna
-$assess_stmt = $conn->prepare("SELECT * FROM assessments WHERE course_id = ?");
-$assess_stmt->bind_param("i", $course_id);
-$assess_stmt->execute();
-$assess_result = $assess_stmt->get_result();
-$assignments = [];
-$quizzes = [];
+// --- UPDATE 1: Sirf Assignments fetch karna (assessments table se) ---
+$assign_stmt = $conn->prepare("SELECT * FROM assessments WHERE course_id = ? AND type = 'assignment'");
+$assign_stmt->bind_param("i", $course_id);
+$assign_stmt->execute();
+$assignments = $assign_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-while($row = $assess_result->fetch_assoc()){
-    if($row['type'] == 'assignment'){
-        $assignments[] = $row;
-    } else {
-        $quizzes[] = $row;
-    }
-}
+// --- UPDATE 2: Quizzes naye 'quizzes' table se fetch karna ---
+$quiz_stmt = $conn->prepare("SELECT * FROM quizzes WHERE course_id = ?");
+$quiz_stmt->bind_param("i", $course_id);
+$quiz_stmt->execute();
+$quizzes = $quiz_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -66,6 +62,7 @@ while($row = $assess_result->fetch_assoc()){
         iframe { width: 100%; height: 350px; border-radius: 5px; }
         .btn-small { padding: 5px 10px; background: #28a745; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; }
         .quiz-btn { background: #007bff; }
+        .container { width: 80%; margin: auto; padding: 20px; }
     </style>
 </head>
 <body>
@@ -128,6 +125,7 @@ while($row = $assess_result->fetch_assoc()){
             <?php foreach($quizzes as $quiz): ?>
                 <div class="assess-box">
                     <h4><?= htmlspecialchars($quiz['title']); ?></h4>
+                    <p>Total Marks: <?= $quiz['total_marks']; ?></p>
                     <a href="take_quiz.php?id=<?= $quiz['id'] ?>" class="btn-small quiz-btn">Start Quiz</a>
                 </div>
             <?php endforeach; ?>
@@ -137,7 +135,7 @@ while($row = $assess_result->fetch_assoc()){
     </div>
 
     <div class="section">
-        <a href="index.php" class="button" style="background: #666;">Back to Dashboard</a>
+        <a href="index.php" class="button" style="background: #666; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Back to Dashboard</a>
     </div>
 </div>
 
