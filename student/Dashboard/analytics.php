@@ -10,8 +10,7 @@ require_once '../../config/db.php';
 
 $student_id = $_SESSION['student_id'];
 
-// SQL Query corrected: 'course_name' ki jagah 'title' use kiya hai
-// Note: Agar aapka table 'student_enrollment' hai toh niche 'enrollments' ko change kar dein
+
 $sql = "
 SELECT co.title, e.progress
 FROM courses co
@@ -35,7 +34,7 @@ while($row = $result->fetch_assoc()){
     $course_count++;
 }
 
-// Overall average progress calculate karna
+
 $overall_progress = ($course_count > 0) ? round($total_progress / $course_count) : 0;
 ?>
 

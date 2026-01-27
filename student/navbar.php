@@ -94,12 +94,10 @@ if(!isset($_SESSION['student_id'])){
 <body>
 
 <nav>
-    <!-- Left: Logo + LMS Name -->
     <div class="left">
-        <img src="../assets/logo.jpeg" alt="Logo">
+        <img src="Certificates/logo1.png" alt="LMS Logo"> 
         <span>LMS</span>
     </div>
-
     <!-- Right: Navigation Links -->
     <div class="right">
         <a href="Dashboard/index.php" class="<?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">Dashboard</a>

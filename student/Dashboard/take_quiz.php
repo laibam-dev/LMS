@@ -10,7 +10,7 @@ if (!isset($_SESSION['student_id']) || !isset($_GET['id'])) {
 $assessment_id = $_GET['id'];
 $student_id = $_SESSION['student_id'];
 
-// Quiz ki details fetch karna
+
 $quiz_query = $conn->prepare("SELECT title FROM assessments WHERE id = ? AND type = 'quiz'");
 $quiz_query->bind_param("i", $assessment_id);
 $quiz_query->execute();

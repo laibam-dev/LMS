@@ -26,10 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    // 2. Percentage calculate karna
+
     $percentage = ($total_questions > 0) ? ($correct_count / $total_questions) * 100 : 0;
 
-    // 3. Score ko 'quiz_results' table mein save karna
+    
     $insert = $conn->prepare("INSERT INTO quiz_results (assessment_id, student_id, total_questions, correct_answers, score_percentage) VALUES (?, ?, ?, ?, ?)");
     $insert->bind_param("iiiid", $assessment_id, $student_id, $total_questions, $correct_count, $percentage);
     

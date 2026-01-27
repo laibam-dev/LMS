@@ -51,16 +51,17 @@ $overall_progress = ($course_count > 0)
 <div class="dashboard-container">
     <div class="sidebar">
         <div class="profile-box">
-            <div class="profile-img"></div>
+            <div class="profile-img">
+                <img src="../Certificates/pic4.jpg" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+            </div>
             <h3><?php echo htmlspecialchars($_SESSION['student_name']); ?></h3>
             <p><?php echo htmlspecialchars($_SESSION['student_email']); ?></p>
             <a href="profile.php" class="btn">Update Profile</a>
         </div>
     </div>
-
     <div class="main-content">
         <div class="welcome-card">
-            <h2>Welcome, <?php echo htmlspecialchars($_SESSION['student_name']); ?> </h2>
+            <h2>Welcome <?php echo htmlspecialchars($_SESSION['student_name']); ?> </h2>
             <p>Here is your dashboard overview</p>
         </div>
 
@@ -68,7 +69,7 @@ $overall_progress = ($course_count > 0)
             <h2>Available Courses to Join</h2>
             <div class="cards-row">
                 <?php
-                // --- UPDATE 2: Yahan bhi 'user_id' check hoga ---
+                
                 $all_sql = "SELECT * FROM courses WHERE id NOT IN (SELECT course_id FROM enrollments WHERE user_id = ?)";
                 $all_stmt = $conn->prepare($all_sql);
                 $all_stmt->bind_param("i", $student_id);
@@ -114,6 +115,11 @@ $overall_progress = ($course_count > 0)
                 <p>Overall progress: <?php echo $overall_progress; ?>%</p>
                 <a href="analytics.php" class="button">View Analytics</a>
             </div>
+            <div class="card">
+    <h3>Attendance</h3>
+    <p>Current Attendance: 85%</p> 
+    <a href="attendance_details.php" class="button">View History</a>
+    </div>
             <div class="card">
                 <h3>Certificates</h3>
                 <p>View your completed certificates</p>
