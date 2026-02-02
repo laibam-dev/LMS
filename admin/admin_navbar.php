@@ -9,7 +9,7 @@
         <div class="collapse navbar-collapse" id="adminNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link active" href="index.php">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="manage-users.php">Manage Users</a></li>
+                <li class="nav-item"><a class="nav-link" href="manage_users.php">Manage Users</a></li>
                 <li class="nav-item"><a class="nav-link" href="manage-courses.php">Manage Courses</a></li>
                 <li class="nav-item"><a class="btn btn-outline-warning btn-sm ms-lg-3" href="../logout.php">Logout</a></li>
             </ul>
