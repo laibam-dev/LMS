@@ -28,7 +28,7 @@ $attendance_data = [
     <div class="welcome-card">
         <h2>Attendance History</h2>
         <p>View your presence record for all enrolled courses</p>
-        <a href="index.php" class="back-link">← Back to Dashboard</a>
+        <a href="dashboard.php" class="back-link">← Back to Dashboard</a>
     </div>
 
     <div class="attendance-content">

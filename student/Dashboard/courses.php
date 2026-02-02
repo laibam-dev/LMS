@@ -67,7 +67,8 @@ $quizzes = $quiz_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 </head>
 <body>
 
-<?php include '../navbar.php'; ?>
+ 
+
 
 <div class="container">
     <div class="section">
@@ -135,7 +136,7 @@ $quizzes = $quiz_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     </div>
 
     <div class="section">
-        <a href="index.php" class="button" style="background: #666; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Back to Dashboard</a>
+        <a href="dashboard.php" class="button" style="background: #666; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Back to Dashboard</a>
     </div>
 </div>
 

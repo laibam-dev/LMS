@@ -9,7 +9,8 @@ if(!isset($_SESSION['student_id'])){
 }
 
 // Navbar
-include '../navbar.php';
+include '../../navbar.php'; 
+
 
 $error = "";
 $success = "";
@@ -76,7 +77,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     </div>
 
     <div class="section">
-        <a href="index.php" class="button">Back to Dashboard</a>
+        <a href="dashboard.php" class="button">Back to Dashboard</a>
     </div>
 </div>
 

@@ -5,7 +5,6 @@ if(!isset($_SESSION['student_id'])){
     exit();
 }
 require_once '../../config/db.php';
-include '../navbar.php';
 
 $student_id = $_SESSION['student_id'];
 
@@ -64,7 +63,7 @@ while($row = $result->fetch_assoc()){
 
 
     <div class="section">
-        <a href="index.php" class="button" style="text-decoration:none; padding:10px 20px; background:#007bff;">Back to Dashboard</a>
+        <a href="dashboard.php" class="button" style="text-decoration:none; padding:10px 20px; background:#007bff;">Back to Dashboard</a>
     </div>
 
 </div>

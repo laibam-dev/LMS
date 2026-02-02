@@ -2,6 +2,10 @@
 require_once "session.php";
 require_once "../config/db.php";
 
+// Sirf ek dafa '../' use karein kyunke instructor folder root ke foran baad hai
+include '../navbar.php'; 
+
+
 $instructor_id    = $_SESSION['instructor_id'];
 $instructor_name  = $_SESSION['instructor_name'] ?? 'Instructor';
 $instructor_email = $_SESSION['instructor_email'] ?? '';

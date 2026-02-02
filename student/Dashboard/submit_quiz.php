@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <p>Your Score: <b style='color:#007bff;'>$percentage%</b></p>
                 </div>
                 <br><br>
-                <a href='index.php' style='padding:10px 20px; background:#007bff; color:white; text-decoration:none; border-radius:5px;'>Back to Dashboard</a>
+                <a href='dashboard.php' style='padding:10px 20px; background:#007bff; color:white; text-decoration:none; border-radius:5px;'>Back to Dashboard</a>
               </div>";
     } else {
         echo "Error saving result.";
