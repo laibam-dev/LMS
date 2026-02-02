@@ -72,7 +72,7 @@ $questions = $questions_query->get_result();
             <?php else: ?>
                 <div style="text-align: center; padding: 20px;">
                     <p>No questions have been added to this quiz yet.</p>
-                    <a href="index.php" class="button" style="text-decoration: none; background: #6c757d; color: white; padding: 10px 20px; border-radius: 5px;">Go Back</a>
+                    <a href="dashboard.php" class="button" style="text-decoration: none; background: #6c757d; color: white; padding: 10px 20px; border-radius: 5px;">Go Back</a>
                 </div>
             <?php endif; ?>
         </form>

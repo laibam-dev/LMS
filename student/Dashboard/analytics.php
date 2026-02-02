@@ -5,7 +5,7 @@ if(!isset($_SESSION['student_id'])){
     exit();
 }
 
-include '../navbar.php';
+
 require_once '../../config/db.php'; 
 
 $student_id = $_SESSION['student_id'];
@@ -89,7 +89,7 @@ $overall_progress = ($course_count > 0) ? round($total_progress / $course_count)
     </div>
 
     <div style="text-align: center; margin-top: 20px;">
-        <a href="index.php" class="button-back">Back to Dashboard</a>
+        <a href="dashboard.php" class="button-back">Back to Dashboard</a>
     </div>
 </div>
 

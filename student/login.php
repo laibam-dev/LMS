@@ -28,7 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['role'] = $row['role']; 
 
                 $success = "Login successful! Redirecting...";
-                header("refresh:2;url=Dashboard/index.php");
+                header("Location: ./Dashboard/dashboard.php");
+                exit();
+            
             } else {
                 $error = "Invalid password";
             }

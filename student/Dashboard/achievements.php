@@ -6,7 +6,7 @@ if(!isset($_SESSION['student_id'])){
     exit();
 }
 
-include '../navbar.php';
+
 
 $achievements = [
     ["title" => "Completed Web Development", "badge" => "../assets/badge1.png", "date" => "2025-12-01"],
@@ -55,7 +55,7 @@ $achievements = [
     </div>
 
     <div class="section">
-        <a href="index.php" class="button">Back to Dashboard</a>
+        <a href="dashboard.php" class="button">Back to Dashboard</a>
     </div>
 
 </div>

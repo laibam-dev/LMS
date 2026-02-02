@@ -7,7 +7,10 @@ if(!isset($_SESSION['student_id'])){
 }
 
 require_once '../../config/db.php'; 
-include '../navbar.php'; 
+
+// '../../' ka matlab hai 2 folder bahar nikal kar LMS folder mein jao
+include '../../navbar.php'; 
+
 
 $student_id = $_SESSION['student_id'];
 
@@ -44,7 +47,7 @@ $overall_progress = ($course_count > 0)
 <html>
 <head>
     <title>Student Dashboard</title>
-    <link rel="stylesheet" href="../Styles/index.css">
+    <link rel="stylesheet" href="../Styles/dashboard.css">
 </head>
 <body>
 
@@ -58,7 +61,12 @@ $overall_progress = ($course_count > 0)
             <p><?php echo htmlspecialchars($_SESSION['student_email']); ?></p>
             <a href="profile.php" class="btn">Update Profile</a>
         </div>
+
+        <div class="sidebar-menu" style="margin-top: 20px;">
+            <a href="../logout.php" class="btn" style="background: white; color: black; text-align: center;">Logout</a>
+        </div>
     </div>
+
     <div class="main-content">
         <div class="welcome-card">
             <h2>Welcome <?php echo htmlspecialchars($_SESSION['student_name']); ?> </h2>
@@ -116,10 +124,10 @@ $overall_progress = ($course_count > 0)
                 <a href="analytics.php" class="button">View Analytics</a>
             </div>
             <div class="card">
-    <h3>Attendance</h3>
-    <p>Current Attendance: 85%</p> 
-    <a href="attendance_details.php" class="button">View History</a>
-    </div>
+                <h3>Attendance</h3>
+                <p>Current Attendance: 85%</p> 
+                <a href="attendance_details.php" class="button">View History</a>
+            </div>
             <div class="card">
                 <h3>Certificates</h3>
                 <p>View your completed certificates</p>

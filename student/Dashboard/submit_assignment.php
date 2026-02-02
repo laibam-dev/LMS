@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['assignment_file'])) {
             <input type="file" name="assignment_file" class="file-input" required>
             <div class="button-group">
                 <button type="submit" class="btn-submit">Submit Assignment</button>
-                <a href="index.php" class="btn-cancel">Cancel</a>
+                <a href="dashboard.php" class="btn-cancel">Cancel</a>
             </div>
         </form>
     </div>
