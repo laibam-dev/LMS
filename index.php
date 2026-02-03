@@ -1,4 +1,7 @@
-
+<?php
+// Navbar include karne ke liye PHP tag
+include 'navbar.php'; 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,7 +69,7 @@
                 <div class="card-icon"><i class="fas fa-user-shield"></i></div>
                 <h3 class="card-title">Admin Portal</h3>
                 <p class="card-text">Manage users, oversee system configurations, and generate reports.</p>
-                <a href="admin/src/controllers/LoginController.php" class="portal-link">Login as Admin</a>
+                <a href="admin/Login.php" class="portal-link">Login as Admin</a>
             </div>
         </div>
     </section>

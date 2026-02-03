@@ -55,8 +55,9 @@ $overall_progress = ($course_count > 0)
     <div class="sidebar">
         <div class="profile-box">
             <div class="profile-img">
-                <img src="../Certificates/pic4.jpg" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            </div>
+
+      <img src="../../assets/pic4.jpg" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+    </div>
             <h3><?php echo htmlspecialchars($_SESSION['student_name']); ?></h3>
             <p><?php echo htmlspecialchars($_SESSION['student_email']); ?></p>
             <a href="profile.php" class="btn">Update Profile</a>

@@ -13,7 +13,7 @@ body {
     overflow: hidden;
     /* Gradient + Image ka combination: Agar image na chale toh gradient dikhega */
     background: linear-gradient(45deg, #4b0082, #0000ff), 
-                url('../../assets/pic1.jpg') no-repeat center center/cover;
+                url('../../assets/pic.jpg') no-repeat center center/cover;
     background-blend-mode: overlay;
 }
 
