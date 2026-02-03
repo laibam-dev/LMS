@@ -2,14 +2,18 @@
 include '../config/db.php';
 header('Content-Type: application/json');
 
-// Get enrollments per course
-$sql = "SELECT c.course_name, COUNT(e.enrollment_id) as enroll_count FROM courses c LEFT JOIN enrollments e ON c.course_id = e.course_id GROUP BY c.course_id ORDER BY enroll_count DESC";
+// Get enrollments per course (using correct column names)
+$sql = "SELECT c.title AS course_title, COUNT(e.id) AS enroll_count
+        FROM courses c
+        LEFT JOIN enrollments e ON c.id = e.course_id
+        GROUP BY c.id
+        ORDER BY enroll_count DESC";
 $result = mysqli_query($conn, $sql);
 
 $courses = [];
 $enrollments = [];
 while ($row = mysqli_fetch_assoc($result)) {
-    $courses[] = $row['course_name'];
+    $courses[] = $row['course_title'];
     $enrollments[] = (int)$row['enroll_count'];
 }
 

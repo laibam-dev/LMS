@@ -5,7 +5,7 @@ if (!isset($_SESSION['admin_id'])) {
     exit;
 }
 include '../config/db.php';
-include 'admin_navbar.php';
+include '../navbar.php';
 $quiz_id = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : 0;
 if ($quiz_id <= 0) {
     die('<div class="alert alert-danger">Invalid Quiz ID.</div>');
