@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $_SESSION['admin_id'] = $row['id'];
             $_SESSION['admin_name'] = $row['name'];
-            header('Location: index.php');
+            header('Location: manage_users.php');
             exit;
         }
     } else {

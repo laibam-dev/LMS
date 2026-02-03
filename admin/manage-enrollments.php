@@ -31,7 +31,7 @@ $result = mysqli_query($conn, $query);
 </head>
 <body>
 
-<?php include 'admin_navbar.php'; ?>
+<?php include '../navbar.php'; ?>
 
 <div class="container my-5">
     <h2 class="fw-bold mb-4" style="color: #003366;">Student Enrollments</h2>
