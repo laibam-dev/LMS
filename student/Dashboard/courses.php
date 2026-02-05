@@ -1,9 +1,12 @@
 <?php
 session_start();
 
-include '../../config/db.php'; 
+// BASE_URL ke liye db.php include
+require_once '../../config/db.php'; 
+
 if (!isset($_SESSION['student_id'])) {
-    header("Location: ../login.php");
+    // Redirect path dynamic kar diya
+    header("Location: " . BASE_URL . "student/login.php");
     exit();
 }
 $student_id = $_SESSION['student_id'];
@@ -39,13 +42,13 @@ while($row = $lesson_result->fetch_assoc()){
     $lessons[] = $row;
 }
 
-// --- UPDATE 1: Sirf Assignments fetch karna (assessments table se) ---
+// Assignments fetch
 $assign_stmt = $conn->prepare("SELECT * FROM assessments WHERE course_id = ? AND type = 'assignment'");
 $assign_stmt->bind_param("i", $course_id);
 $assign_stmt->execute();
 $assignments = $assign_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-// --- UPDATE 2: Quizzes naye 'quizzes' table se fetch karna ---
+// Quizzes fetch
 $quiz_stmt = $conn->prepare("SELECT * FROM quizzes WHERE course_id = ?");
 $quiz_stmt->bind_param("i", $course_id);
 $quiz_stmt->execute();
@@ -56,7 +59,7 @@ $quizzes = $quiz_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 <html>
 <head>
     <title><?= htmlspecialchars($course['title']); ?></title>
-    <link rel="stylesheet" href="../Styles/courses.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>student/Styles/courses.css">
     <style>
         .video-container, .assess-box { margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9; }
         iframe { width: 100%; height: 350px; border-radius: 5px; }
@@ -66,9 +69,6 @@ $quizzes = $quiz_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     </style>
 </head>
 <body>
-
- 
-
 
 <div class="container">
     <div class="section">
@@ -136,7 +136,7 @@ $quizzes = $quiz_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     </div>
 
     <div class="section">
-        <a href="dashboard.php" class="button" style="background: #666; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Back to Dashboard</a>
+        <a href="<?php echo BASE_URL; ?>student/Dashboard/dashboard.php" class="button" style="background: #666; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Back to Dashboard</a>
     </div>
 </div>
 

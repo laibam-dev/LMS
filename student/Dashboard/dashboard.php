@@ -1,20 +1,22 @@
+
 <?php
 session_start();
 
+// BASE_URL aur database ke liye db.php include
+require_once '../../config/db.php'; 
+
 if(!isset($_SESSION['student_id'])){
-    header("Location: ../login.php");
+    // Login redirect ko dynamic banaya
+    header("Location: " . BASE_URL . "student/login.php");
     exit();
 }
 
-require_once '../../config/db.php'; 
-
-// '../../' ka matlab hai 2 folder bahar nikal kar LMS folder mein jao
-include '../../navbar.php'; 
+// Navbar include karne ka sahi tareeqa hosting ke liye
+include $_SERVER['DOCUMENT_ROOT'] . '/LMS/navbar.php'; 
 
 
 $student_id = $_SESSION['student_id'];
 
-// --- UPDATE 1: Yahan 'user_id' aur 'progress' add kiya hai ---
 $sql = "
 SELECT c.id, c.title, e.progress
 FROM courses c
@@ -47,7 +49,7 @@ $overall_progress = ($course_count > 0)
 <html>
 <head>
     <title>Student Dashboard</title>
-    <link rel="stylesheet" href="../Styles/dashboard.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>student/Styles/dashboard.css">
 </head>
 <body>
 
@@ -55,16 +57,15 @@ $overall_progress = ($course_count > 0)
     <div class="sidebar">
         <div class="profile-box">
             <div class="profile-img">
-
-      <img src="../../assets/pic4.jpg" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-    </div>
+                <img src="<?php echo BASE_URL; ?>assets/pic4.jpg" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+            </div>
             <h3><?php echo htmlspecialchars($_SESSION['student_name']); ?></h3>
             <p><?php echo htmlspecialchars($_SESSION['student_email']); ?></p>
             <a href="profile.php" class="btn">Update Profile</a>
         </div>
 
         <div class="sidebar-menu" style="margin-top: 20px;">
-            <a href="../logout.php" class="btn" style="background: white; color: black; text-align: center;">Logout</a>
+            <a href="<?php echo BASE_URL; ?>student/logout.php" class="btn" style="background: white; color: black; text-align: center;">Logout</a>
         </div>
     </div>
 
@@ -78,7 +79,6 @@ $overall_progress = ($course_count > 0)
             <h2>Available Courses to Join</h2>
             <div class="cards-row">
                 <?php
-                
                 $all_sql = "SELECT * FROM courses WHERE id NOT IN (SELECT course_id FROM enrollments WHERE user_id = ?)";
                 $all_stmt = $conn->prepare($all_sql);
                 $all_stmt->bind_param("i", $student_id);
@@ -90,7 +90,7 @@ $overall_progress = ($course_count > 0)
                         echo '<div class="card">';
                         echo '<h4>'.htmlspecialchars($c['title']).'</h4>';
                         echo '<p>'.htmlspecialchars($c['subject']).'</p>';
-                        // Join button enroll_process.php ki taraf le jayega
+                        // Join button path
                         echo '<a href="enroll_process.php?course_id='.$c['id'].'" class="button">Join Course</a>';
                         echo '</div>';
                     }

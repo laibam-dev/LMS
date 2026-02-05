@@ -1,17 +1,20 @@
 <?php
 session_start();
 
+// BASE_URL ke liye db.php include karna zaroori hai
+require_once '../../config/db.php'; 
+
 if(!isset($_SESSION['student_id'])){
-    header("Location: ../login.php");
+    // Dynamic login redirect
+    header("Location: " . BASE_URL . "student/login.php");
     exit();
 }
 
-
-
+// Achievements array mein badges ke paths ko BASE_URL ke saath dynamic kiya
 $achievements = [
-    ["title" => "Completed Web Development", "badge" => "../assets/badge1.png", "date" => "2025-12-01"],
-    ["title" => "PHP & MySQL Expert", "badge" => "../assets/badge2.png", "date" => "2025-12-10"],
-    ["title" => "Python Programming Master", "badge" => "../assets/badge3.png", "date" => "2025-12-15"]
+    ["title" => "Completed Web Development", "badge" => BASE_URL . "assets/badge1.png", "date" => "2025-12-01"],
+    ["title" => "PHP & MySQL Expert", "badge" => BASE_URL . "assets/badge2.png", "date" => "2025-12-10"],
+    ["title" => "Python Programming Master", "badge" => BASE_URL . "assets/badge3.png", "date" => "2025-12-15"]
 ];
 ?>
 <!DOCTYPE html>
@@ -55,7 +58,7 @@ $achievements = [
     </div>
 
     <div class="section">
-        <a href="dashboard.php" class="button">Back to Dashboard</a>
+        <a href="<?php echo BASE_URL; ?>student/Dashboard/dashboard.php" class="button">Back to Dashboard</a>
     </div>
 
 </div>

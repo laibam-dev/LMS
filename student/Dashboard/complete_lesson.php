@@ -1,6 +1,13 @@
 <?php
 session_start();
+// db.php already BASE_URL provide kar raha hai
 require_once '../../config/db.php';
+
+// Agar student login nahi hai toh login page par bhej do
+if(!isset($_SESSION['student_id'])){
+    header("Location: " . BASE_URL . "student/login.php");
+    exit();
+}
 
 $student_id = $_SESSION['student_id'];
 $lesson_id  = $_POST['lesson_id'];
@@ -21,6 +28,7 @@ if($check->get_result()->num_rows == 0){
     $insert->execute();
 }
 
+/* 2️⃣ Progress calculation */
 $completed_stmt = $conn->prepare("
     SELECT COUNT(*) AS completed 
     FROM lesson_completion lc
@@ -51,6 +59,7 @@ $update = $conn->prepare(
 $update->bind_param("iii", $progress, $student_id, $course_id);
 $update->execute();
 
-
-header("Location: courses.php?course_id=".$course_id);
+/* 3️⃣ Redirection back to the course page using BASE_URL */
+header("Location: " . BASE_URL . "student/courses.php?course_id=" . $course_id);
 exit();
+?>

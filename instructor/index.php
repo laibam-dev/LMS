@@ -1,14 +1,20 @@
 <?php
 session_start();
+// 1. db.php include kiya taake BASE_URL mil jaye
+require_once "../config/db.php";
 
+// 2. Agar pehle se login hai toh dashboard par bhejain (Dynamic Path)
 if (isset($_SESSION['instructor_id']) && ($_SESSION['role'] ?? '') === 'instructor') {
-    header("Location: dashboard.php");
+    header("Location: " . BASE_URL . "instructor/dashboard.php");
     exit;
 }
 
 $error = "";
 if (isset($_GET['error'])) {
-    $error = "Invalid email or password";
+    // Error messages ko mazeed clear kiya ja sakta hai
+    if($_GET['error'] == 'invalid') $error = "Invalid email or password";
+    elseif($_GET['error'] == 'empty') $error = "Please fill all fields";
+    else $error = "Login failed. Please try again.";
 }
 ?>
 <!DOCTYPE html>
@@ -16,7 +22,7 @@ if (isset($_GET['error'])) {
 <head>
     <meta charset="UTF-8">
     <title>Instructor Login</title>
-    <link rel="stylesheet" href="/LMS/instructor/style/auth.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>instructor/style/auth.css">
 </head>
 <body>
 
@@ -28,7 +34,7 @@ if (isset($_GET['error'])) {
             <div class="error"><?php echo $error; ?></div>
         <?php endif; ?>
 
-        <form method="post" action="login.php">
+        <form method="post" action="<?php echo BASE_URL; ?>instructor/login.php">
             <label>Email</label>
             <input type="email" name="email" required>
 

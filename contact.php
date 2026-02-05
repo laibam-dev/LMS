@@ -1,6 +1,6 @@
 <?php
 session_start();
-// Sahi file name 'db.php' hai
+// Sahi file name 'db.php' hai aur isme BASE_URL define hai
 require_once 'config/db.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -12,6 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO contact_messages (full_name, email, message) VALUES ('$name', '$email', '$message')";
 
     if (mysqli_query($conn, $sql)) {
+        // Redirect path ko dynamic rakha taake host ke mutabiq chale
         echo "<script>alert('Thank you! Message sent.'); window.location.href='contact.php';</script>";
     } else {
         echo "Error: " . mysqli_error($conn);
@@ -68,7 +69,7 @@ include 'navbar.php';
 
         <div class="contact-form-container">
             <h3>Send us a Message</h3>
-            <form action="contact.php" method="POST">
+            <form action="<?php echo BASE_URL; ?>contact.php" method="POST">
                 <div class="input-group">
                     <label>Full Name</label>
                     <input type="text" name="name" placeholder="Enter your name" required>

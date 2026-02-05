@@ -1,13 +1,13 @@
 <?php
 session_start();
+// db.php include kar rahe hain taake BASE_URL aur $conn mil jaye
 require_once '../../config/db.php'; 
 
-
+// Agar student login nahi hai toh login page par bhej do
 if(!isset($_SESSION['student_id'])){
-    header("Location: ../login.php");
+    header("Location: " . BASE_URL . "student/login.php");
     exit();
 }
-
 
 if(isset($_GET['course_id'])){
     $course_id = $_GET['course_id'];
@@ -20,26 +20,26 @@ if(isset($_GET['course_id'])){
     $result = $stmt->get_result();
 
     if($result->num_rows == 0){
-        
-    
+        // Naya enrollment insert karna
         $insert_sql = "INSERT INTO enrollments (user_id, course_id, progress, status) VALUES (?, ?, 0, 'active')";
         $insert_stmt = $conn->prepare($insert_sql);
         $insert_stmt->bind_param("ii", $student_id, $course_id);
         
         if($insert_stmt->execute()){
-            
-            header("Location: index.php?msg=enrolled");
+            // Success redirect using BASE_URL
+            header("Location: " . BASE_URL . "student/Dashboard/dashboard.php?msg=enrolled");
             exit();
         } else {
             echo "Error: Enrollment failed.";
         }
     } else {
-        
-        header("Location: index.php?msg=already_enrolled");
+        // Already enrolled redirect
+        header("Location: " . BASE_URL . "student/Dashboard/dashboard.php?msg=already_enrolled");
         exit();
     }
 } else {
-    header("Location: index.php");
+    // Agar course_id missing hai toh dashboard par wapas
+    header("Location: " . BASE_URL . "student/Dashboard/dashboard.php");
     exit();
 }
 ?>

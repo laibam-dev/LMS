@@ -1,5 +1,6 @@
 <?php
 session_start();
+// db.php include hai, isi mein humne BASE_URL define kiya tha
 require_once "../config/db.php";
 
 $error = "";
@@ -15,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif ($password == "") {
         $error = "Please enter your password";
     } else {
-        // 'users' table se student ka data check karna
         $sql = "SELECT * FROM users WHERE email='$email' AND role='student' LIMIT 1";
         $result = mysqli_query($conn, $sql);
 
@@ -28,7 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['role'] = $row['role']; 
 
                 $success = "Login successful! Redirecting...";
-                header("Location: ./Dashboard/dashboard.php");
+                // Yahan absolute path use karna behtar hai
+                header("Location: Dashboard/dashboard.php");
                 exit();
             
             } else {
@@ -48,7 +49,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Login - LMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="Styles/login.css?v=1.3">
+    
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>student/Styles/login.css?v=1.3">
 </head>
 <body>
 
@@ -63,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="email" name="email" placeholder="Username" value="<?= htmlspecialchars($email); ?>" required>
             <i class="fa-solid fa-user"></i>
         </div>
-
+       
         <div class="input-group">
             <input type="password" name="password" placeholder="Password" required>
             <i class="fa-solid fa-lock"></i>

@@ -1,5 +1,8 @@
 <?php
-// Navbar include karne ke liye PHP tag
+// 1. db.php ko include kiya taake BASE_URL mil sake
+include 'config/db.php'; 
+
+// 2. Navbar include karne ke liye PHP tag
 include 'navbar.php'; 
 ?>
 <!DOCTYPE html>
@@ -8,7 +11,7 @@ include 'navbar.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LMS | Welcome to Learning Portal</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -55,21 +58,21 @@ include 'navbar.php';
                 <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
                 <h3 class="card-title">Student Portal</h3>
                 <p class="card-text">View your enrolled courses, track progress, and download certificates.</p>
-                <a href="student/login.php" class="portal-link">Login as Student</a>
+                <a href="<?php echo BASE_URL; ?>student/login.php" class="portal-link">Login as Student</a>
             </div>
 
             <div class="portal-card">
                 <div class="card-icon"><i class="fas fa-chalkboard-teacher"></i></div>
                 <h3 class="card-title">Instructor Portal</h3>
                 <p class="card-text">Create new content, manage your students, and review assignments.</p>
-                <a href="instructor/index.php" class="portal-link">Login as Instructor</a>
+                <a href="<?php echo BASE_URL; ?>instructor/index.php" class="portal-link">Login as Instructor</a>
             </div>
 
             <div class="portal-card">
                 <div class="card-icon"><i class="fas fa-user-shield"></i></div>
                 <h3 class="card-title">Admin Portal</h3>
                 <p class="card-text">Manage users, oversee system configurations, and generate reports.</p>
-                <a href="admin/Login.php" class="portal-link">Login as Admin</a>
+                <a href="<?php echo BASE_URL; ?>admin/Login.php" class="portal-link">Login as Admin</a>
             </div>
         </div>
     </section>
@@ -110,18 +113,18 @@ include 'navbar.php';
         <div class="footer-col">
             <h4>Quick Links</h4>
             <ul>
-                <li><a href="index.php">Home</a></li>
-                <li><a href="index.php#about">About Us</a></li>
-                <li><a href="contact.php">Contact Us</a></li>
+                <li><a href="<?php echo BASE_URL; ?>index.php">Home</a></li>
+                <li><a href="<?php echo BASE_URL; ?>index.php#about">About Us</a></li>
+                <li><a href="<?php echo BASE_URL; ?>contact.php">Contact Us</a></li>
             </ul>
         </div>
 
         <div class="footer-col">
             <h4>User Portals</h4>
             <ul>
-                <li><a href="student/login.php">Student Login</a></li>
-                <li><a href="instructor/index.php">Instructor Login</a></li>
-                <li><a href="admin/login.php">Admin Login</a></li>
+                <li><a href="<?php echo BASE_URL; ?>student/login.php">Student Login</a></li>
+                <li><a href="<?php echo BASE_URL; ?>instructor/index.php">Instructor Login</a></li>
+                <li><a href="<?php echo BASE_URL; ?>admin/login.php">Admin Login</a></li>
             </ul>
         </div>
     </div>
@@ -130,8 +133,5 @@ include 'navbar.php';
     </div>
 </footer>
 
-
-    
 </body>
 </html>
-

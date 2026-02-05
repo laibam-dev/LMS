@@ -16,7 +16,7 @@ $result = mysqli_query($conn, $sql);
 <html>
 <head>
     <title>Available Courses</title>
-    <link href="../assets/css/instructor.css" rel="stylesheet">
+    <link href="<?php echo BASE_URL; ?>assets/css/instructor.css" rel="stylesheet">
 </head>
 <body style="padding:20px">
 
@@ -28,7 +28,7 @@ $result = mysqli_query($conn, $sql);
             <h3><?= htmlspecialchars($course['title']) ?></h3>
             <p><?= nl2br(htmlspecialchars($course['description'])) ?></p>
 
-            <a href="course_detail.php?id=<?= $course['id'] ?>">
+            <a href="<?php echo BASE_URL; ?>student/course_detail.php?id=<?= $course['id'] ?>">
                 View Course
             </a>
         </div>
