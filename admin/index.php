@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 if (!isset($_SESSION['admin_id'])) {
@@ -32,18 +31,22 @@ $enroll_data = mysqli_fetch_assoc($enroll_result);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body { font-family: 'Poppins', sans-serif; background-color: #f4f7f6; }
-        .stat-card { border: none; border-radius: 15px; transition: transform 0.3s; }
-        .stat-card:hover { transform: translateY(-5px); }
+        .stat-card { border: 1.5px solid #1e40af; border-radius: 15px; transition: box-shadow 0.3s, transform 0.3s; box-shadow: 0 2px 12px 0 rgba(96,165,250,0.08); }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 4px 24px 0 #1e40af; border-color: #1e40af; }
         .bg-polymath { background-color: #1e40af; color: white; }
         .main-content { 
-            margin-left: 260px;
-            padding: 20px;
-            width: calc(100% - 260px);
+            margin-left: 300px;
+            padding: 30px 40px 30px 30px;
+            width: calc(100% - 300px);
         }
-        .sidebar-fixed {
-            background: #1e40af !important;
-            color: #FFD700;
+        .dashboard-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 18px fffrgba(30,64,175,0.07);
+            margin-bottom: 20px;
+            padding: 30px 25px 25px 25px;
         }
+      
         .navbar, .navbar.bg-polymath {
             background-color: #1e40af !important;
         }
@@ -58,7 +61,7 @@ $enroll_data = mysqli_fetch_assoc($enroll_result);
         }
         .sidebar-fixed a.active, .sidebar-fixed a:hover, .nav-link.active, .nav-link:focus {
             background: #60a5fa !important;
-            color: #1e40af !important;
+            color: #fff !important;
             border-left: 4px solid #60a5fa !important;
         }
         .logo-circle {
@@ -94,90 +97,88 @@ $enroll_data = mysqli_fetch_assoc($enroll_result);
 <div class="d-flex" style="min-height:100vh;">
     <?php include 'sidebar.php'; ?>
     <div class="main-content">
-        <div class="row mb-4">
-            <div class="col">
-                <h2 class="fw-bold" style="color: #003366;">Welcome to Admin Dashboard</h2>
-                <p class="text-muted">Polymath Path Institute Management System</p>
-            </div>
+        <div class="dashboard-card" style="margin-bottom:30px;">
+            <h2 class="fw-bold" style="color: #1e40af;">Welcome to Admin Dashboard</h2>
+            <p class="text-muted">Polymath Path Institute Management System</p>
         </div>
-
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card stat-card shadow-sm h-100">
-                <div class="card-body text-center p-4">
-                    <h5 class="text-muted mb-3">Total Students</h5>
-                    <h2 class="display-5 fw-bold text-primary"><?php echo $student_data['total']; ?></h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card stat-card shadow-sm h-100 border-start border-success border-5">
-                <div class="card-body text-center p-4">
-                    <h5 class="text-muted mb-3">Instructors</h5>
-                    <h2 class="display-5 fw-bold text-success"><?php echo $teacher_data['total']; ?></h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card stat-card shadow-sm h-100 border-start border-warning border-5">
-                <div class="card-body text-center p-4">
-                    <h5 class="text-muted mb-3">Active Courses</h5>
-                    <h2 class="display-5 fw-bold text-warning"><?php echo $course_data['total']; ?></h2>
-                </div>
-            </div>
-        </div>
-    </div>
-        <!-- Removed Quick Actions and Total Enrollments card -->
-
-    <!-- Recent Activity Section -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card shadow-sm border-0 p-3">
-                <h5 class="fw-bold mb-3" style="color:#003366;">Recent Activity</h5>
-                <table class="table table-bordered table-hover w-100 text-center align-middle mb-0">
-                    <thead style="background:#003366; color:#FFD700;">
-                        <tr>
-                            <th class="text-start">Name</th>
-                            <th>Role</th>
-                            <th>Registration Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    $recent_users = mysqli_query($conn, "SELECT name, role, created_at FROM users ORDER BY created_at DESC LIMIT 5");
-                    while($user = mysqli_fetch_assoc($recent_users)) {
-                        echo '<tr>';
-                        echo '<td class="text-start">' . htmlspecialchars($user['name']) . '</td>';
-                        echo '<td>' . htmlspecialchars(ucfirst($user['role'])) . '</td>';
-                        echo '<td>' . date('d M Y, H:i', strtotime($user['created_at'])) . '</td>';
-                        echo '</tr>';
-                    }
-                    ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Visual Analytics Section -->
-    <div class="row mt-5 justify-content-center" id="analytics-section">
-        <div class="col-lg-10 mx-auto">
-            <div class="card shadow-sm border-0 p-4" style="background-color:#003366; color:#FFD700;">
-                <h4 class="fw-bold mb-4 text-center" style="color:#FFD700;">Visual Analytics</h4>
-                <div class="row justify-content-center">
-                    <div class="col-md-6 mb-4 d-flex justify-content-center">
-                        <canvas id="enrollmentsBarChart" style="max-width:100%;min-width:350px;height:350px;"></canvas>
-                    </div>
-                    <div class="col-md-6 mb-4 d-flex justify-content-center">
-                        <canvas id="studentTrendLineChart" style="max-width:100%;min-width:350px;height:350px;"></canvas>
+        <div class="dashboard-card">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card stat-card shadow-sm h-100" style="background:#fff; border-radius:20px; box-shadow:0 2px 12px 0 rgba(96,165,250,0.08);">
+                        <div class="card-body text-center p-4">
+                           <h5 class="text-muted mb-3"><i class="fas fa-user-graduate me-2"></i> Total Students</h5>
+                            <h2 class="display-5 fw-bold" style="color:#1e40af;">
+                                <?php echo isset($student_data['total']) ? $student_data['total'] : '0'; ?>
+                            </h2>
+                        </div>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="card stat-card shadow-sm h-100" style="background:#fff; border-radius:20px; box-shadow:0 2px 12px 0 rgba(96,165,250,0.08);">
+                        <div class="card-body text-center p-4">
+                            <h5 class="text-muted mb-3"><i class="fas fa-chalkboard-teacher me-2"></i> Instructors</h5>
+                           
+                            <h2 class="display-5 fw-bold" style="color:#1e40af;">
+                                <?php echo isset($teacher_data['total']) ? $teacher_data['total'] : '0'; ?>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card stat-card shadow-sm h-100" style="background:#fff; border-radius:20px; box-shadow:0 2px 12px 0 rgba(96,165,250,0.08);">
+                        <div class="card-body text-center p-4">
+                            <h5 class="text-muted mb-3"><i class="fas fa-book-open me-2"></i> Active Courses</h5>
+                            <h2 class="display-5 fw-bold" style="color:#1e40af;">
+                                <?php echo isset($course_data['total']) ? $course_data['total'] : '0'; ?>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    <div class="mt-5">
+    <h4 class="fw-bold mb-4" style="color:#1e40af;">Visual Analytics</h4> <div class="row g-4">
+      <div class="row g-4">
+        <div class="col-md-6">
+            <div class="dashboard-card h-100 shadow-sm border-0 bg-white">
+                <h5 class="fw-bold mb-4" style="color:#1e40af;">Course Enrollments</h5>
+                <canvas id="enrollmentsBarChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="dashboard-card h-100 shadow-sm border-0 bg-white">
+                <h5 class="fw-bold mb-4" style="color:#1e40af;">Registration Trend</h5>
+                <canvas id="studentTrendLineChart"></canvas>
             </div>
         </div>
     </div>
 </div>
 
-</div>
+    <div class="dashboard-card" style="margin-top:30px;">
+            <h4 class="fw-bold mb-3" style="color:#1e40af;">Recent Activity</h4>
+            <table class="table table-bordered table-hover w-100 text-center align-middle mb-0">
+                <thead style="background:#1e40af; color:#fff;">
+                    <tr>
+                        <th class="text-start">Name</th>
+                        <th>Role</th>
+                        <th>Registration Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
+                $recent_users = mysqli_query($conn, "SELECT name, role, created_at FROM users ORDER BY created_at DESC LIMIT 5");
+                while($user = mysqli_fetch_assoc($recent_users)) {
+                    echo '<tr>';
+                    echo '<td class="text-start">' . htmlspecialchars($user['name']) . '</td>';
+                    echo '<td>' . htmlspecialchars(ucfirst($user['role'])) . '</td>';
+                    echo '<td>' . date('d M Y, H:i', strtotime($user['created_at'])) . '</td>';
+                    echo '</tr>';
+                }
+                ?>
+                </tbody>
+            </table>
+        </div>
 
 <!-- Chart.js -->
                 </div>
@@ -195,16 +196,16 @@ fetch('analytics_enrollments.php')
                 datasets: [{
                     label: 'Enrollments',
                     data: data.enrollments,
-                    backgroundColor: '#FFD700',
-                    borderColor: '#003366',
+                    backgroundColor: '#1e40af',
+                    borderColor: '#60a5fa',
                     borderWidth: 2
                 }]
             },
             options: {
-                plugins: { legend: { labels: { color: '#FFD700' } } },
+                plugins: { legend: { labels: { color: '#333' } } },
                 scales: {
-                    x: { ticks: { color: '#FFD700' }, grid: { color: '#003366' } },
-                    y: { ticks: { color: '#FFD700' }, grid: { color: '#003366' } }
+                    x: { ticks: { color: '#333' }, grid: { color: '#e5e7eb' } },
+                    y: { ticks: { color: '#333' }, grid: { color: '#e5e7eb' } }
                 }
             }
         });
@@ -222,19 +223,20 @@ fetch('analytics_registrations.php')
                 datasets: [{
                     label: 'Registrations',
                     data: data.registrations,
-                    backgroundColor: 'rgba(0,51,102,0.2)',
-                    borderColor: '#FFD700',
+                    backgroundColor: '#1e40af',
+                    borderColor: '#60a5fa',
                     borderWidth: 3,
-                    pointBackgroundColor: '#003366',
-                    pointBorderColor: '#FFD700',
+                    pointBackgroundColor: '#1e40af',
+                    pointBorderColor: '#1e40af',
                     tension: 0.3
                 }]
             },
             options: {
-                plugins: { legend: { labels: { color: '#FFD700' } } },
+                plugins: { legend: { labels: { color: '#333' } } },
                 scales: {
-                    x: { ticks: { color: '#FFD700' }, grid: { color: '#003366' } },
-                    y: { ticks: { color: '#FFD700' }, grid: { color: '#003366' } }
+                    x: { ticks: { color: '#333' }, grid: { color: '#e5e7eb' } },
+                    y: { ticks: { color: '#333' }, grid: { color: '#e5e7eb' } }
+                    
                 }
             }
         });

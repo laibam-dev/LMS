@@ -40,8 +40,15 @@ $result = mysqli_query($conn, $query);
         .table-container { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eee; }
         .sidebar-fixed {
             background: #1e40af !important;
-            color: #FFD700;
+            color:  #f4f7f6;
         }
+        .dashboard-card {
+    background: white; 
+    border-radius: 15px; 
+    padding: 25px; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+    border: 1px solid #eee;
+}
         .navbar, .navbar.bg-polymath {
             background-color: #1e40af !important;
         }
@@ -83,20 +90,22 @@ $result = mysqli_query($conn, $query);
 <div class="d-flex">
     <?php include 'sidebar.php'; ?>
     <div class="main-content flex-grow-1">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2 class="fw-bold" style="color: #003366;">Manage Users</h2>
-                <p class="text-muted small">View and manage Students & Instructors for Polymath Path Institute.</p>
-            </div>
-            <div class="d-flex gap-2">
-                <button class="btn shadow-sm" style="background-color:#003366; color:#FFD700; font-weight:600; border:none;" data-bs-toggle="modal" data-bs-target="#addUserModal">
-                    <i class="fa fa-user-plus"></i> Add User
-                </button>
-                <button class="btn btn-dark shadow-sm" onclick="window.print()">
-                    <i class="bi bi-printer"></i> Download Report
-                </button>
-            </div>
+        <div class="dashboard-card mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="fw-bold mb-1" style="color: #1e40af;">Manage Users</h2>
+            <p class="text-muted mb-0">View and manage Students & Instructors for Polymath Path Institute.</p>
         </div>
+        <div style="display: flex; gap: 10px; align-items: center; white-space: nowrap;">
+            <a href="add_user.php" class="btn btn-primary d-flex align-items-center gap-2" style="background-color: #3b82f6; border: none; border-radius: 10px; padding: 8px 15px; font-size: 14px;">
+                <i class="fa fa-user-plus"></i> Add User
+            </a>
+            <a href="export_users.php" class="btn btn-outline-primary d-flex align-items-center gap-2" style="border: 2px solid #3b82f6; color: #3b82f6; border-radius: 10px; padding: 8px 15px; font-size: 14px; background: transparent;">
+                <i class="fa fa-download"></i> Download Report
+            </a>
+        </div>
+    </div>
+</div>
         <?php if ($success): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <?php echo $success; ?>
