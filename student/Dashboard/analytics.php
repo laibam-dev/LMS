@@ -1,15 +1,16 @@
 <?php
 session_start();
+
+// BASE_URL ke liye db.php include
+require_once '../../config/db.php'; 
+
 if(!isset($_SESSION['student_id'])){
-    header("Location: ../login.php");
+    // Dynamic login redirect
+    header("Location: " . BASE_URL . "student/login.php");
     exit();
 }
 
-
-require_once '../../config/db.php'; 
-
 $student_id = $_SESSION['student_id'];
-
 
 $sql = "
 SELECT co.title, e.progress
@@ -28,12 +29,10 @@ $total_progress = 0;
 $course_count = 0;
 
 while($row = $result->fetch_assoc()){
-    // Table se 'title' column ka data fetch ho raha hai
     $analytics[$row['title']] = $row['progress'];
     $total_progress += $row['progress'];
     $course_count++;
 }
-
 
 $overall_progress = ($course_count > 0) ? round($total_progress / $course_count) : 0;
 ?>
@@ -42,7 +41,7 @@ $overall_progress = ($course_count > 0) ? round($total_progress / $course_count)
 <html>
 <head>
     <title>Student Analytics</title>
-    <link rel="stylesheet" href="../Styles/analytics.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>student/Styles/analytics.css">
     <style>
         .container { max-width: 900px; margin: 30px auto; padding: 20px; 
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -89,7 +88,7 @@ $overall_progress = ($course_count > 0) ? round($total_progress / $course_count)
     </div>
 
     <div style="text-align: center; margin-top: 20px;">
-        <a href="dashboard.php" class="button-back">Back to Dashboard</a>
+        <a href="<?php echo BASE_URL; ?>student/Dashboard/dashboard.php" class="button-back">Back to Dashboard</a>
     </div>
 </div>
 

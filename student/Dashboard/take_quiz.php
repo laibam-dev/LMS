@@ -1,10 +1,11 @@
 <?php
 session_start();
-include '../../config/db.php';
+// 1. Database aur BASE_URL ke liye
+require_once '../../config/db.php';
 
-// Check karein ke student logged in hai aur ID mil rahi hai
+// 2. Check karein ke student logged in hai aur ID mil rahi hai
 if (!isset($_SESSION['student_id']) || !isset($_GET['id'])) {
-    header("Location: index.php");
+    header("Location: " . BASE_URL . "student/Dashboard/dashboard.php");
     exit();
 }
 
@@ -21,7 +22,7 @@ if (!$quiz) {
     die("Quiz not found in the new quizzes table!");
 }
 
-// --- UPDATE 2 (FIXED): Column ka naam 'assessment_id' karein (Screenshot 565d0247 ke mutabiq) ---
+// --- UPDATE 2 (FIXED): Column ka naam 'assessment_id' ---
 $questions_query = $conn->prepare("SELECT * FROM quiz_questions WHERE assessment_id = ?");
 $questions_query->bind_param("i", $quiz_id);
 $questions_query->execute();
@@ -33,7 +34,7 @@ $questions = $questions_query->get_result();
 <head>
     <meta charset="UTF-8">
     <title>Take Quiz - <?= htmlspecialchars($quiz['title']) ?></title>
-    <link rel="stylesheet" href="../Styles/courses.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>student/Styles/courses.css">
     <style>
         .quiz-container { max-width: 800px; margin: 30px auto; padding: 30px; background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .question-box { margin-bottom: 30px; padding: 20px; border: 1px solid #f0f0f0; border-radius: 8px; }
@@ -46,7 +47,10 @@ $questions = $questions_query->get_result();
     </style>
 </head>
 <body>
-    <?php include '../navbar.php'; ?>
+    <?php 
+    // Navbar include karne ka sahi rasta
+    include $_SERVER['DOCUMENT_ROOT'] . '/LMS/navbar.php'; 
+    ?>
 
     <div class="quiz-container">
         <h1 style="color: #1b4f91;">Quiz: <?= htmlspecialchars($quiz['title']) ?></h1>
@@ -54,7 +58,7 @@ $questions = $questions_query->get_result();
         <hr style="margin: 20px 0;">
         
         <form action="submit_quiz.php" method="POST">
-            <input type="hidden" name="quiz_id" value="<?= $quiz_id ?>">
+            <input type="hidden" name="assessment_id" value="<?= $quiz_id ?>">
             
             <?php if ($questions->num_rows > 0): ?>
                 <?php $count = 1; while($q = $questions->fetch_assoc()): ?>
@@ -72,7 +76,7 @@ $questions = $questions_query->get_result();
             <?php else: ?>
                 <div style="text-align: center; padding: 20px;">
                     <p>No questions have been added to this quiz yet.</p>
-                    <a href="dashboard.php" class="button" style="text-decoration: none; background: #6c757d; color: white; padding: 10px 20px; border-radius: 5px;">Go Back</a>
+                    <a href="<?php echo BASE_URL; ?>student/Dashboard/dashboard.php" class="button" style="text-decoration: none; background: #6c757d; color: white; padding: 10px 20px; border-radius: 5px;">Go Back</a>
                 </div>
             <?php endif; ?>
         </form>

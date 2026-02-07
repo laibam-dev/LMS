@@ -1,17 +1,23 @@
 <?php
 session_start();
+
+// BASE_URL aur DB connection ke liye
+require_once '../../config/db.php';
+
 if(!isset($_SESSION['student_id'])){
-    header("Location: ../login.php");
+    // Dynamic login redirect
+    header("Location: " . BASE_URL . "student/login.php");
     exit();
 }
-require_once '../../config/db.php';
 
 $student_id = $_SESSION['student_id'];
 
+// SQL query for certificates
 $sql = "
 SELECT 
     c.title AS course_title,
-    cert.status
+    cert.status,
+    cert.course_id
 FROM certificates cert
 JOIN course c ON cert.course_id = c.id
 WHERE cert.student_id = ?
@@ -32,7 +38,7 @@ while($row = $result->fetch_assoc()){
 <html>
 <head>
     <title>Student Certificates</title>
-    <link rel="stylesheet" href="../Styles/certificates.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>student/Styles/certificates.css">
 </head>
 <body>
     <div class="container">
@@ -50,7 +56,7 @@ while($row = $result->fetch_assoc()){
                     <td><?php echo $cert['status']; ?></td>
                     <td>
                         <?php if($cert['status'] == "Generated"){ ?>
-                            <a href="../Certificates/laiba_D6.pdf" target="_blank" class="button">View / Download</a>
+                            <a href="<?php echo BASE_URL; ?>certificates/certificate_<?php echo $student_id; ?>_<?php echo $cert['course_id']; ?>.pdf" target="_blank" class="button">View / Download</a>
                         <?php } else { ?>
                             <span class="button disabled">Not Ready</span>
                         <?php } ?>
@@ -59,11 +65,8 @@ while($row = $result->fetch_assoc()){
             <?php } ?>
         </table>
     </div>
-
-
-
     <div class="section">
-        <a href="dashboard.php" class="button" style="text-decoration:none; padding:10px 20px; background:#007bff;">Back to Dashboard</a>
+        <a href="<?php echo BASE_URL; ?>student/Dashboard/dashboard.php" class="button" style="text-decoration:none; padding:10px 20px; background:#007bff; color:white; border-radius:5px;">Back to Dashboard</a>
     </div>
 
 </div>

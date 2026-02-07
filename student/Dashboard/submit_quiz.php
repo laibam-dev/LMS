@@ -1,6 +1,13 @@
 <?php
 session_start();
-include '../../config/db.php';
+// Database aur BASE_URL ke liye
+require_once '../../config/db.php';
+
+// Agar student login nahi hai toh login page par bhej do
+if(!isset($_SESSION['student_id'])){
+    header("Location: " . BASE_URL . "student/login.php");
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $assessment_id = $_POST['assessment_id'];
@@ -26,26 +33,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-
     $percentage = ($total_questions > 0) ? ($correct_count / $total_questions) * 100 : 0;
 
-    
     $insert = $conn->prepare("INSERT INTO quiz_results (assessment_id, student_id, total_questions, correct_answers, score_percentage) VALUES (?, ?, ?, ?, ?)");
     $insert->bind_param("iiiid", $assessment_id, $student_id, $total_questions, $correct_count, $percentage);
     
     if ($insert->execute()) {
-    
-        echo "<div style='text-align:center; margin-top:50px;
-         font-family:sans-serif;'>
+        // Design aur Links ko BASE_URL ke saath set kiya
+        echo "<div style='text-align:center; margin-top:50px; font-family:sans-serif;'>
                 <h1 style='color:#28a745;'>Quiz Submitted!</h1>
-                <div style='font-size:20px; border:1px solid #ddd; 
-                display:inline-block; padding:20px; border-radius:10px;'>
+                <div style='font-size:20px; border:1px solid #ddd; display:inline-block; padding:20px; border-radius:10px; background:#f9f9f9;'>
                     <p>Total Questions: <b>$total_questions</b></p>
                     <p>Correct Answers: <b>$correct_count</b></p>
                     <p>Your Score: <b style='color:#007bff;'>$percentage%</b></p>
                 </div>
                 <br><br>
-                <a href='dashboard.php' style='padding:10px 20px; background:#007bff; color:white; text-decoration:none; border-radius:5px;'>Back to Dashboard</a>
+                <a href='" . BASE_URL . "student/Dashboard/dashboard.php' style='padding:10px 20px; background:#007bff; color:white; text-decoration:none; border-radius:5px;'>Back to Dashboard</a>
               </div>";
     } else {
         echo "Error saving result.";

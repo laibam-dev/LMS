@@ -3,8 +3,9 @@
 session_start();
 require_once "../config/db.php";
 
+// Agar login button press nahi kiya toh wapas index par bhejain
 if (!isset($_POST['login'])) {
-    header("Location: index.php?error=blocked");
+    header("Location: " . BASE_URL . "instructor/index.php?error=blocked");
     exit;
 }
 
@@ -12,7 +13,7 @@ $email = trim($_POST['email'] ?? '');
 $password = trim($_POST['password'] ?? '');
 
 if ($email === "" || $password === "") {
-    header("Location: index.php?error=empty");
+    header("Location: " . BASE_URL . "instructor/index.php?error=empty");
     exit;
 }
 
@@ -24,12 +25,12 @@ $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 
 if (!$user) {
-    header("Location: index.php?error=invalid");
+    header("Location: " . BASE_URL . "instructor/index.php?error=invalid");
     exit;
 }
 
 if ($user['role'] !== 'instructor') {
-    header("Location: index.php?error=not_instructor");
+    header("Location: " . BASE_URL . "instructor/index.php?error=not_instructor");
     exit;
 }
 
@@ -52,7 +53,7 @@ if (is_string($stored) && strlen($stored) > 0 && str_starts_with($stored, '$2y$'
 }
 
 if (!$ok) {
-    header("Location: index.php?error=invalid");
+    header("Location: " . BASE_URL . "instructor/index.php?error=invalid");
     exit;
 }
 
@@ -64,5 +65,6 @@ $_SESSION['role'] = $user['role'];
 $_SESSION['instructor_name'] = $user['name'] ?? 'Instructor';
 $_SESSION['instructor_email'] = $user['email'];
 
-header("Location: dashboard.php");
+// Kamyab login ke baad dynamic dashboard rasta
+header("Location: " . BASE_URL . "instructor/dashboard.php");
 exit;

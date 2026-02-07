@@ -1,5 +1,15 @@
 <?php
 session_start();
+
+// BASE_URL ke liye db.php include karna zaroori hai
+require_once '../../config/db.php'; 
+
+if(!isset($_SESSION['student_id'])){
+    // Dynamic login redirect
+    header("Location: " . BASE_URL . "student/login.php");
+    exit();
+}
+
 // Dummy data
 $attendance_data = [
     "English" => [
@@ -19,7 +29,7 @@ $attendance_data = [
 <html>
 <head>
     <title>Attendance History</title>
-    <link rel="stylesheet" href="../Styles/attendance_details.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>student/Styles/attendance_details.css">
     
 </head>
 <body>
@@ -28,7 +38,7 @@ $attendance_data = [
     <div class="welcome-card">
         <h2>Attendance History</h2>
         <p>View your presence record for all enrolled courses</p>
-        <a href="dashboard.php" class="back-link">← Back to Dashboard</a>
+        <a href="<?php echo BASE_URL; ?>student/Dashboard/dashboard.php" class="back-link">← Back to Dashboard</a>
     </div>
 
     <div class="attendance-content">

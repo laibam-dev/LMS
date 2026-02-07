@@ -1,9 +1,11 @@
 <?php
 session_start();
-include '../../config/db.php';
+// Database aur BASE_URL ke liye
+require_once '../../config/db.php';
 
 if (!isset($_SESSION['student_id']) || !isset($_GET['id'])) {
-    header("Location: index.php");
+    // Dynamic redirect
+    header("Location: " . BASE_URL . "student/Dashboard/dashboard.php");
     exit();
 }
 
@@ -16,8 +18,14 @@ $stmt->execute();
 $assign = $stmt->get_result()->fetch_assoc();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['assignment_file'])) {
-    $target_dir = "../../uploads/assignments/";
-    if (!is_dir($target_dir)) { mkdir($target_dir, 0777, true); }
+    
+    // Hosting par file upload ke liye physical path zaroori hai
+    $target_dir = $_SERVER['DOCUMENT_ROOT'] . "/LMS/uploads/assignments/";
+    
+    // Agar folder nahi hai toh bana do
+    if (!is_dir($target_dir)) { 
+        mkdir($target_dir, 0777, true); 
+    }
 
     $file_name = time() . "_" . basename($_FILES["assignment_file"]["name"]);
     $target_file = $target_dir . $file_name;
@@ -27,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['assignment_file'])) {
         $insert->bind_param("iis", $assessment_id, $student_id, $file_name);
         
         if ($insert->execute()) {
-            echo "<script>alert('Assignment Uploaded Successfully!'); window.location.href='index.php';</script>";
+            echo "<script>alert('Assignment Uploaded Successfully!'); window.location.href='" . BASE_URL . "student/Dashboard/dashboard.php';</script>";
         }
     } else {
         echo "Sorry, there was an error uploading your file.";
@@ -39,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['assignment_file'])) {
 <html>
 <head>
     <title>Submit Assignment</title>
-    <link rel="stylesheet" href="../Styles/submit_assignment.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>student/Styles/submit_assignment.css">
 </head>
 <body>
     <div class="upload-container">
@@ -49,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['assignment_file'])) {
             <input type="file" name="assignment_file" class="file-input" required>
             <div class="button-group">
                 <button type="submit" class="btn-submit">Submit Assignment</button>
-                <a href="dashboard.php" class="btn-cancel">Cancel</a>
+                <a href="<?php echo BASE_URL; ?>student/Dashboard/dashboard.php" class="btn-cancel">Cancel</a>
             </div>
         </form>
     </div>
