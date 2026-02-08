@@ -12,21 +12,28 @@ $user_result = mysqli_query($conn, $user_query);
 $user = mysqli_fetch_assoc($user_result);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $role = $_POST['role'];
-    
-    // Agar password field bhari hai toh update karein, warna purana rehne dein
-    if (!empty($_POST['password'])) {
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $update_query = "UPDATE users SET email='$email', password_hash='$password', role='$role' WHERE id=$id";
-    } else {
-        $update_query = "UPDATE users SET email='$email', role='$role' WHERE id=$id";
-    }
+        $email = mysqli_real_escape_string($conn, $_POST['email']);
+        $role = $_POST['role'];
+        $update_query = ""; // 1. Variable initialize kiya taake Line 24 ka error khatam ho
 
-    if (mysqli_query($conn, $update_query)) {
-        echo "<script>alert('User Updated Successfully!'); window.location.href='manage-users.php';</script>";
+        if (!empty($_POST['password'])) {
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $update_query = "UPDATE users SET email='$email', password_hash='$password', role='$role' WHERE id='$id'";
+        } else {
+            $update_query = "UPDATE users SET email='$email', role='$role' WHERE id='$id'";
+        }
+
+        // 2. Ab query chalegi aur variable define hoga
+        if (mysqli_query($conn, $update_query)) {
+            $admin_id = $_SESSION['admin_id'];
+            $log_desc = "Admin updated details for user: " . $email;
+            log_activity($conn, $admin_id, 'User Updated', $log_desc);
+
+            echo "<script>alert('User Updated Successfully!'); window.location.href='manage-users.php';</script>";
+        } else {
+            $message = "Error: " . mysqli_error($conn);
+        }
     }
-}
 ?>
 
 <!DOCTYPE html>

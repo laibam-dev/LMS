@@ -39,6 +39,12 @@
 <div class="sidebar-fixed">
     <a href="index.php"><i class="fa fa-tachometer-alt" style="color:#fff;"></i> <span style="color:#fff;">Dashboard</span></a>
     <a href="manage-users.php"><i class="fa fa-users" style="color:#fff;"></i> <span style="color:#fff;">Manage Users</span></a>
+    <a href="send_announcement.php" class="nav-link text-white">
+    <i class="fas fa-bullhorn me-2"></i> Post Announcement
+</a>
+    <a href="activity_log.php" class="nav-link text-white mb-2">
+    <i class="fas fa-list-ul me-2"></i> Activity Logs
+</a>
     <a href="settings.php"><i class="fa fa-cog" style="color:#fff;"></i> <span style="color:#fff;">Settings</span></a>
    <li class="nav-item list-unstyled">
     <a href="profile.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'profile.php') ? 'active' : ''; ?>" style="color:#fff;">

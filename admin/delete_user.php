@@ -1,14 +1,29 @@
 <?php
+session_start();
 include '../config/db.php';
 
-if(isset($_GET['id'])) {
-    $id = $_GET['id'];
-    $delete_query = "DELETE FROM users WHERE id = $id";
+// Check karein ke Admin login hai
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
+if (isset($_GET['id'])) {
+    // Sahi variable name use karein ($id)
+    $id = mysqli_real_escape_string($conn, $_GET['id']);
     
-    if(mysqli_query($conn, $delete_query)) {
-        header("Location: manage-users.php?msg=User Deleted Successfully");
+    $delete_query = "DELETE FROM users WHERE id = '$id'";
+
+    if (mysqli_query($conn, $delete_query)) {
+        // Activity record karein
+        $admin_id = $_SESSION['admin_id'];
+        log_activity($conn, $admin_id, 'User Deleted', "Admin deleted user with ID: $id");
+
+        echo "<script>alert('User Deleted Successfully!'); window.location.href='manage-users.php';</script>";
     } else {
         echo "Error: " . mysqli_error($conn);
     }
+} else {
+    header('Location: manage-users.php');
 }
 ?>

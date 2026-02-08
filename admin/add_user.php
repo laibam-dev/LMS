@@ -13,12 +13,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $role = $_POST['role'];
 
-    $query = "INSERT INTO users (name, email, password_hash, role) VALUES ('$name', '$email', '$password', '$role')";
+   $query = "INSERT INTO users (name, email, password_hash, role) VALUES ('$name', '$email', '$password', '$role')";
+        
     if (mysqli_query($conn, $query)) {
-        echo "<script>alert('User Added Successfully!'); window.location.href='manage-users.php';</script>";
-    } else {
-        $message = "Error: " . mysqli_error($conn);
-    }
+            // Activity record karein (Naye table structure ke mutabiq)
+            $admin_id = $_SESSION['admin_id'];
+            log_activity($conn, $admin_id, 'User Added', "Admin added a new user with email: $email");
+            
+            echo "<script>alert('User Added Successfully!'); window.location.href='manage-users.php';</script>";
+        } else {
+            $message = "Error: " . mysqli_error($conn);
+        }
 }
 ?>
 
