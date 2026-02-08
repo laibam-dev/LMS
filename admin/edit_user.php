@@ -14,7 +14,7 @@ $user = mysqli_fetch_assoc($user_result);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = mysqli_real_escape_string($conn, $_POST['email']);
         $role = $_POST['role'];
-        $update_query = ""; // 1. Variable initialize kiya taake Line 24 ka error khatam ho
+        $update_query = ""; 
 
         if (!empty($_POST['password'])) {
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -23,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $update_query = "UPDATE users SET email='$email', role='$role' WHERE id='$id'";
         }
 
-        // 2. Ab query chalegi aur variable define hoga
         if (mysqli_query($conn, $update_query)) {
             $admin_id = $_SESSION['admin_id'];
             $log_desc = "Admin updated details for user: " . $email;

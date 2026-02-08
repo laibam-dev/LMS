@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../config/db.php';
-$error = ''; // Error variable ko initialize kiya taake warning na aaye
+$error = ''; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
@@ -57,8 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
             width: 100%;
-            max-width: 380px; /* Width thori kam ki taake compact lage */
-            padding: 40px 35px; /* Padding kam ki taake height zyada na ho */
+            max-width: 380px; 
+            padding: 40px 35px; 
             text-align: center;
         }
 

@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
    $query = "INSERT INTO users (name, email, password_hash, role) VALUES ('$name', '$email', '$password', '$role')";
         
     if (mysqli_query($conn, $query)) {
-            // Activity record karein (Naye table structure ke mutabiq)
+            
             $admin_id = $_SESSION['admin_id'];
             log_activity($conn, $admin_id, 'User Added', "Admin added a new user with email: $email");
             

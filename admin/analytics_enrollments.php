@@ -2,7 +2,7 @@
 include '../config/db.php';
 header('Content-Type: application/json');
 
-// Get enrollments per course (using correct column names)
+
 $sql = "SELECT c.title AS course_title, COUNT(e.id) AS enroll_count
         FROM courses c
         LEFT JOIN enrollments e ON c.id = e.course_id

@@ -2,7 +2,7 @@
 session_start();
 include '../config/db.php';
 
-// Refined Query: Join users table to get names
+// Join users table to get names
 $query = "SELECT al.*, u.name as admin_name 
           FROM activity_log al 
           JOIN users u ON al.user_id = u.id 
