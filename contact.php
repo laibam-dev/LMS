@@ -9,7 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $message = mysqli_real_escape_string($conn, $_POST['message']);
 
-    $sql = "INSERT INTO contact_messages (full_name, email, message) VALUES ('$name', '$email', '$message')";
+   
+    $sql = "INSERT INTO contact_messages (full_name, email, message, status) VALUES ('$name', '$email', '$message', 'unread')";
 
     if (mysqli_query($conn, $sql)) {
         // Redirect path ko dynamic rakha taake host ke mutabiq chale
@@ -88,7 +89,7 @@ include 'navbar.php';
     </div>
 
     <footer style="text-align: center; padding: 20px; color: #64748b; font-size: 0.9rem;">
-        &copy; 2026 Laiba LMS. All rights reserved.
+        &copy; 2026 LMS. All rights reserved.
     </footer>
 
 </body>
