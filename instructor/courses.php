@@ -1,6 +1,8 @@
 <?php
-require_once "session.php";
 require_once "../config/db.php";
+require_once "../config/base.php";
+require_once "session.php";
+   // ✅ BASE PATH
 
 $instructor_id = $_SESSION['instructor_id'];
 $instructor_name = $_SESSION['instructor_name'] ?? 'Instructor';
@@ -28,7 +30,9 @@ $result = $stmt->get_result();
             <h1>Courses</h1>
             <p>Manage all your courses here.</p>
         </div>
-        <a href="add_course.php" class="add-btn">+ Add Course</a>
+        <a href="<?php echo BASE_URL; ?>/instructor/add_course.php" class="add-btn">
+            + Add Course
+        </a>
     </div>
 
     <div class="table-card">
@@ -64,15 +68,18 @@ $result = $stmt->get_result();
 
                         <td>
                             <div class="action-btns">
-                                <a class="btn-sm" href="edit_course.php?id=<?php echo (int)$row['id']; ?>">
+
+                                <a class="btn-sm"
+                                   href="<?php echo BASE_URL; ?>/instructor/edit_course.php?id=<?php echo (int)$row['id']; ?>">
                                     Edit
                                 </a>
 
                                 <a class="btn-sm danger"
-                                   href="delete_course.php?id=<?php echo (int)$row['id']; ?>"
+                                   href="<?php echo BASE_URL; ?>/instructor/delete_course.php?id=<?php echo (int)$row['id']; ?>"
                                    onclick="return confirm('Delete this course?');">
                                     Delete
                                 </a>
+
                             </div>
                         </td>
                     </tr>

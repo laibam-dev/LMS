@@ -1,6 +1,8 @@
 <?php
-require_once "session.php";
 require_once "../config/db.php";
+require_once "../config/base.php";
+require_once "session.php";
+
 
 $instructor_id = $_SESSION['instructor_id'];
 $course_id = (int)($_GET['id'] ?? 0);

@@ -1,6 +1,7 @@
 <?php
-require_once "session.php";
 require_once "../config/db.php";
+require_once "../config/base.php";
+require_once "session.php";
 
 // Sirf ek dafa '../' use karein kyunke instructor folder root ke foran baad hai
 include '../navbar.php'; 

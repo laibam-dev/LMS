@@ -1,6 +1,8 @@
 <?php
-
 require_once "../config/db.php";
+require_once "../config/base.php";
+require_once "session.php";
+
 
 $instructor_name  = $_SESSION['instructor_name'] ?? 'Instructor';
 $instructor_email = $_SESSION['instructor_email'] ?? '';

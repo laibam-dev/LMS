@@ -1,6 +1,9 @@
 <?php
+require_once "../config/db.php";
+require_once "../config/base.php";
+require_once "session.php";
+
 session_start();
-include "../config/db.php";
 
 if (!isset($_SESSION['instructor_id'])) {
     header("Location: login.php");
