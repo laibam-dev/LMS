@@ -1,6 +1,13 @@
 <?php
 session_start();
-include '../config/db.php';
+include '../config/db.php'; // BASE_URL yahan se define ho jayega
+
+// Agar admin pehle se logged in hai, toh seedha dashboard bhej do
+if (isset($_SESSION['admin_id'])) {
+    header('Location: ' . BASE_URL . 'admin/index.php');
+    exit;
+}
+
 $error = ''; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -21,7 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $_SESSION['admin_id'] = $row['id'];
             $_SESSION['admin_name'] = $row['name'];
-            header('Location: index.php');
+            
+            // Success redirect using BASE_URL
+            header('Location: ' . BASE_URL . 'admin/index.php');
             exit;
         }
     } else {
@@ -39,113 +48,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Aapka Glass-morphism CSS (No changes) */
         body { 
-            background: radial-gradient(circle at top right, #1e40af, #1e1b4b, #0f172a); /* Deep depth background */
+            background: radial-gradient(circle at top right, #1e40af, #1e1b4b, #0f172a);
             font-family: 'Plus Jakarta Sans', sans-serif;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
+            height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0;
         }
-
         .glass-card {
-            background: rgba(255, 255, 255, 0.07);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border-radius: 35px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 380px; 
-            padding: 40px 35px; 
-            text-align: center;
+            background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(25px) saturate(180%);
+            border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5); width: 100%; max-width: 380px; padding: 40px 35px; text-align: center;
         }
-
-        .main-title {
-            color: #fff;
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin-bottom: 5px;
-            background: linear-gradient(to right, #fff, #93c5fd);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .main-title { 
+            color: #fff; font-size: 2.2rem; font-weight: 800; margin-bottom: 5px;
+            background: linear-gradient(to right, #fff, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
-        .subtitle {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.85rem;
-            margin-bottom: 30px;
-        }
-
-        .input-box {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .input-box i {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.9rem;
-        }
-
-        .form-control {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 18px;
-            padding: 14px 14px 14px 48px;
-            color: #fff;
-            font-size: 0.9rem;
-            transition: 0.3s;
-        }
-
-        .form-control:focus {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #3b82f6;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
-            color: #fff;
-        }
-
-        .btn-premium {
-            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 18px;
-            font-weight: 700;
-            width: 100%;
-            margin-top: 10px;
-            box-shadow: 0 10px 20px rgba(30, 64, 175, 0.3);
-            transition: 0.4s;
-        }
-
-        .btn-premium:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 25px rgba(30, 64, 175, 0.5);
-        }
-
-        .error-msg {
-            background: rgba(239, 68, 68, 0.15);
-            color: #fca5a5;
-            padding: 10px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            margin-bottom: 20px;
-            border: 1px solid rgba(239, 68, 68, 0.2);
-        }
-
-        .back-btn {
-            display: inline-block;
-            margin-top: 25px;
-            color: rgba(255, 255, 255, 0.4);
-            text-decoration: none;
-            font-size: 0.8rem;
-            transition: 0.3s;
-        }
-
+        .subtitle { color: rgba(255, 255, 255, 0.5); font-size: 0.85rem; margin-bottom: 30px; }
+        .input-box { position: relative; margin-bottom: 20px; }
+        .input-box i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: rgba(255, 255, 255, 0.4); font-size: 0.9rem; }
+        .form-control { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; padding: 14px 14px 14px 48px; color: #fff; font-size: 0.9rem; transition: 0.3s; }
+        .form-control:focus { background: rgba(255, 255, 255, 0.1); border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); color: #fff; }
+        .btn-premium { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); color: white; border: none; padding: 14px; border-radius: 18px; font-weight: 700; width: 100%; margin-top: 10px; box-shadow: 0 10px 20px rgba(30, 64, 175, 0.3); transition: 0.4s; }
+        .btn-premium:hover { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(30, 64, 175, 0.5); }
+        .error-msg { background: rgba(239, 68, 68, 0.15); color: #fca5a5; padding: 10px; border-radius: 12px; font-size: 0.8rem; margin-bottom: 20px; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .back-btn { display: inline-block; margin-top: 25px; color: rgba(255, 255, 255, 0.4); text-decoration: none; font-size: 0.8rem; transition: 0.3s; }
         .back-btn:hover { color: #fff; }
     </style>
 </head>
@@ -177,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </button>
         </form>
 
-        <a href="../index.php" class="back-btn">Exit to Selection</a>
+        <a href="<?php echo BASE_URL; ?>index.php" class="back-btn">Exit to Selection</a>
     </div>
 
 </body>

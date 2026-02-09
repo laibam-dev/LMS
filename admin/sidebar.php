@@ -1,22 +1,21 @@
 <style>
-  
-      .sidebar-fixed {
-            background: #1e40af; color: #fff; 
-            min-height: 100vh;
-            width: 220px; 
-            position: fixed; 
-            top: 64px; 
-            left: 0; 
-            z-index: 1030;
-            display: flex; flex-direction: column; 
-            padding: 2rem 1rem 1rem 1rem;
-            margin-top: 25px;
-            margin-left: 25px;
-            margin-right: 25px;
-            height: calc(100vh - 120px);
-            border-radius: 20px;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.05);
-        }
+    .sidebar-fixed {
+        background: #1e40af; color: #fff; 
+        min-height: 100vh;
+        width: 220px; 
+        position: fixed; 
+        top: 64px; 
+        left: 0; 
+        z-index: 1030;
+        display: flex; flex-direction: column; 
+        padding: 2rem 1rem 1rem 1rem;
+        margin-top: 25px;
+        margin-left: 25px;
+        margin-right: 25px;
+        height: calc(100vh - 120px);
+        border-radius: 20px;
+        box-shadow: 10px 0 30px rgba(0,0,0,0.05);
+    }
     .sidebar-fixed a {
         color: #fff; font-weight: 500; margin-bottom: 0.5rem; border-radius: 8px; transition: background 0.2s, color 0.2s;
         padding: 0.75rem 1rem; text-decoration: none;
@@ -36,26 +35,39 @@
         padding: 2rem 2rem 2rem 2rem;
     }
 </style>
+
 <div class="sidebar-fixed">
-    <a href="index.php"><i class="fa fa-tachometer-alt" style="color:#fff;"></i> <span style="color:#fff;">Dashboard</span></a>
-    <a href="manage-users.php"><i class="fa fa-users" style="color:#fff;"></i> <span style="color:#fff;">Manage Users</span></a>
-    <a href="send_announcement.php" class="nav-link text-white">
-    <i class="fas fa-bullhorn me-2"></i> Post Announcement
-</a>
-    <a href="activity_log.php" class="nav-link text-white mb-2">
-    <i class="fas fa-list-ul me-2"></i> Activity Logs
-</a>
-    <a href="settings.php"><i class="fa fa-cog" style="color:#fff;"></i> <span style="color:#fff;">Settings</span></a>
-   <li class="nav-item list-unstyled">
-    <a href="profile.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'profile.php') ? 'active' : ''; ?>" style="color:#fff;">
-        <i class="fas fa-user-circle me-2"></i>
-        <span>My Profile</span>
+    <a href="<?php echo BASE_URL; ?>admin/index.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>">
+        <i class="fa fa-tachometer-alt"></i> <span>Dashboard</span>
     </a>
-    <li class="nav-item list-unstyled mt-3">
-    <a href="logout.php" class="nav-link text-danger fw-bold">
-        <i class="fas fa-sign-out-alt me-2"></i>
-        <span>Logout</span>
+
+    <a href="<?php echo BASE_URL; ?>admin/manage-users.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'manage-users.php') ? 'active' : ''; ?>">
+        <i class="fa fa-users"></i> <span>Manage Users</span>
     </a>
-</li>
-</li>
+
+    <a href="<?php echo BASE_URL; ?>admin/send_announcement.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'send_announcement.php') ? 'active' : ''; ?>">
+        <i class="fas fa-bullhorn"></i> <span>Post Announcement</span>
+    </a>
+
+    <a href="<?php echo BASE_URL; ?>admin/activity_log.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'activity_log.php') ? 'active' : ''; ?>">
+        <i class="fas fa-list-ul"></i> <span>Activity Logs</span>
+    </a>
+
+    <a href="<?php echo BASE_URL; ?>admin/settings.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'settings.php') ? 'active' : ''; ?>">
+        <i class="fa fa-cog"></i> <span>Settings</span>
+    </a>
+
+    <li class="nav-item list-unstyled">
+        <a href="<?php echo BASE_URL; ?>admin/profile.php" class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'profile.php') ? 'active' : ''; ?>">
+            <i class="fas fa-user-circle"></i>
+            <span>My Profile</span>
+        </a>
+    </li>
+
+    <li class="nav-item list-unstyled mt-auto">
+        <a href="<?php echo BASE_URL; ?>admin/logout.php" class="nav-link text-danger fw-bold">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </li>
 </div>

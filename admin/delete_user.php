@@ -1,10 +1,10 @@
 <?php
 session_start();
 include '../config/db.php';
-//admi login check
 
+// 1. Admin login check using BASE_URL
 if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
+    header('Location: ' . BASE_URL . 'admin/login.php');
     exit;
 }
 
@@ -19,11 +19,16 @@ if (isset($_GET['id'])) {
         $admin_id = $_SESSION['admin_id'];
         log_activity($conn, $admin_id, 'User Deleted', "Admin deleted user with ID: $id");
 
-        echo "<script>alert('User Deleted Successfully!'); window.location.href='manage-users.php';</script>";
+        // 2. JavaScript redirect using BASE_URL
+        echo "<script>
+                alert('User Deleted Successfully!'); 
+                window.location.href='" . BASE_URL . "admin/manage-users.php';
+              </script>";
     } else {
         echo "Error: " . mysqli_error($conn);
     }
 } else {
-    header('Location: manage-users.php');
+    // 3. Header redirect if no ID is found
+    header('Location: ' . BASE_URL . 'admin/manage-users.php');
 }
 ?>
