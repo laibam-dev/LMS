@@ -1,24 +1,22 @@
-
 <?php
 session_start();
-
 // BASE_URL aur database ke liye db.php include
 require_once '../../config/db.php'; 
 
 if(!isset($_SESSION['student_id'])){
-    // Login redirect ko dynamic banaya
+    // Login redirect using BASE_URL
     header("Location: " . BASE_URL . "student/login.php");
     exit();
 }
 
-// Navbar include karne ka sahi tareeqa hosting ke liye
+// Navbar include path - isay bhi dynamic rakha hai
 include $_SERVER['DOCUMENT_ROOT'] . '/LMS/navbar.php'; 
-
 
 $student_id = $_SESSION['student_id'];
 
+// SQL Query
 $sql = "
-SELECT c.id, c.title, e.progress
+SELECT c.id, c.title, c.subject, c.description, e.progress
 FROM courses c
 JOIN enrollments e ON c.id = e.course_id
 WHERE e.user_id = ?
@@ -61,7 +59,7 @@ $overall_progress = ($course_count > 0)
             </div>
             <h3><?php echo htmlspecialchars($_SESSION['student_name']); ?></h3>
             <p><?php echo htmlspecialchars($_SESSION['student_email']); ?></p>
-            <a href="profile.php" class="btn">Update Profile</a>
+            <a href="<?php echo BASE_URL; ?>student/Dashboard/profile.php" class="btn">Update Profile</a>
         </div>
 
         <div class="sidebar-menu" style="margin-top: 20px;">
@@ -79,7 +77,7 @@ $overall_progress = ($course_count > 0)
             <h2>Available Courses to Join</h2>
             <div class="cards-row">
                 <?php
-                $all_sql = "SELECT * FROM courses WHERE id NOT IN (SELECT course_id FROM enrollments WHERE user_id = ?)";
+                $all_sql = "SELECT * FROM courses WHERE status = 'published' AND id NOT IN (SELECT course_id FROM enrollments WHERE user_id = ?)";
                 $all_stmt = $conn->prepare($all_sql);
                 $all_stmt->bind_param("i", $student_id);
                 $all_stmt->execute();
@@ -89,9 +87,10 @@ $overall_progress = ($course_count > 0)
                     while($c = $all_res->fetch_assoc()){
                         echo '<div class="card">';
                         echo '<h4>'.htmlspecialchars($c['title']).'</h4>';
-                        echo '<p>'.htmlspecialchars($c['subject']).'</p>';
-                        // Join button path
-                        echo '<a href="enroll_process.php?course_id='.$c['id'].'" class="button">Join Course</a>';
+                        echo '<p style="color: #17a2b8; font-weight: bold; margin: 5px 0;">'.htmlspecialchars($c['subject']).'</p>';
+                        echo '<p style="font-size: 0.9em; color: #666;">'.substr(htmlspecialchars($c['description']), 0, 100).'...</p>';
+                        // Join button path with BASE_URL
+                        echo '<a href="'.BASE_URL.'student/Dashboard/enroll_process.php?course_id='.$c['id'].'" class="button">Join Course</a>';
                         echo '</div>';
                     }
                 } else { echo "<p>No new courses available.</p>"; }
@@ -106,8 +105,9 @@ $overall_progress = ($course_count > 0)
                     <?php foreach($courses as $course): ?>
                         <div class="card">
                             <h4><?php echo htmlspecialchars($course['title']); ?></h4>
+                            <p style="color: #666; font-size: 0.8em;"><?php echo htmlspecialchars($course['subject']); ?></p>
                             <p>Progress: <?php echo $course['progress']; ?>%</p>
-                            <a href="courses.php?course_id=<?php echo $course['id']; ?>" class="button">
+                            <a href="<?php echo BASE_URL; ?>student/Dashboard/courses.php?course_id=<?php echo $course['id']; ?>" class="button">
                                 View Details
                             </a>
                         </div>
@@ -122,17 +122,17 @@ $overall_progress = ($course_count > 0)
             <div class="card">
                 <h3>Analytics</h3>
                 <p>Overall progress: <?php echo $overall_progress; ?>%</p>
-                <a href="analytics.php" class="button">View Analytics</a>
+                <a href="<?php echo BASE_URL; ?>student/Dashboard/analytics.php" class="button">View Analytics</a>
             </div>
             <div class="card">
                 <h3>Attendance</h3>
                 <p>Current Attendance: 85%</p> 
-                <a href="attendance_details.php" class="button">View History</a>
+                <a href="<?php echo BASE_URL; ?>student/Dashboard/attendance_details.php" class="button">View History</a>
             </div>
             <div class="card">
                 <h3>Certificates</h3>
                 <p>View your completed certificates</p>
-                <a href="certificates.php" class="button">View Certificates</a>
+                <a href="<?php echo BASE_URL; ?>student/Dashboard/certificates.php" class="button">View Certificates</a>
             </div>
         </div>
     </div>

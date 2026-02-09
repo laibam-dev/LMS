@@ -1,10 +1,12 @@
 <?php
 session_start();
+include '../config/db.php'; // Top par include kiya taake BASE_URL har jagah milay
+
+// Auth Check using BASE_URL
 if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
+    header('Location: ' . BASE_URL . 'admin/login.php');
     exit;
 }
-include '../config/db.php';
 
 $message = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -14,11 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $role = $_POST['role'];
 
     $query = "INSERT INTO users (name, email, password_hash, role) VALUES ('$name', '$email', '$password', '$role')";
+        
     if (mysqli_query($conn, $query)) {
-        echo "<script>alert('User Added Successfully!'); window.location.href='manage-users.php';</script>";
-    } else {
-        $message = "Error: " . mysqli_error($conn);
-    }
+            $admin_id = $_SESSION['admin_id'];
+            log_activity($conn, $admin_id, 'User Added', "Admin added a new user with email: $email");
+            
+            // Redirect using dynamic BASE_URL in JS
+            echo "<script>alert('User Added Successfully!'); window.location.href='" . BASE_URL . "admin/manage-users.php';</script>";
+        } else {
+            $message = "Error: " . mysqli_error($conn);
+        }
 }
 ?>
 
@@ -51,16 +58,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="container-fluid">
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
-                        <div class="form-card">
+                        <div class="form-card shadow-sm">
                             <div class="d-flex align-items-center mb-4">
-                                <a href="manage-users.php" class="text-decoration-none me-3" style="color: #1e40af;">
+                                <a href="<?php echo BASE_URL; ?>admin/manage-users.php" class="text-decoration-none me-3" style="color: #1e40af;">
                                     <i class="fas fa-arrow-left fa-lg"></i>
                                 </a>
                                 <h2 class="fw-bold mb-0" style="color: #1e40af;">Add New User</h2>
                             </div>
                             
                             <?php if($message != ""): ?>
-                                <div class="alert alert-danger"><?php echo $message; ?></div>
+                                <div class="alert alert-danger" style="border-radius: 12px;"><?php echo $message; ?></div>
                             <?php endif; ?>
 
                             <form method="POST">
@@ -79,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label"><i class="fas fa-user-tag me-2"></i>User Role</label>
-                                        <select name="role" class="form-select form-control" required>
+                                        <select name="role" class="form-select form-control" required style="border-radius: 10px;">
                                             <option value="" selected disabled>Select Role</option>
                                             <option value="student">Student</option>
                                             <option value="instructor">Instructor</option>
@@ -87,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </div>
                                 </div>
                                 <div class="mt-4 text-end">
-                                    <button type="reset" class="btn btn-light me-2" style="border-radius: 10px;">Clear Form</button>
+                                    <button type="reset" class="btn btn-light me-2" style="border-radius: 10px; border: 1px solid #ddd;">Clear Form</button>
                                     <button type="submit" class="btn btn-polymath">
                                         <i class="fas fa-save me-2"></i>Save User
                                     </button>

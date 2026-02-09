@@ -1,8 +1,10 @@
 <?php
 include '../config/db.php';
 session_start();
+
+// 1. Auth Check using BASE_URL
 if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
+    header('Location: ' . BASE_URL . 'admin/login.php');
     exit;
 }
 
@@ -10,7 +12,7 @@ $admin_id = $_SESSION['admin_id'];
 $success = '';
 $error = '';
 
-// 1. Profile Update aur Image Upload Logic
+// 2. Profile Update aur Image Upload Logic
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -18,15 +20,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Image handling
     if (!empty($_FILES['profile_pic']['name'])) {
+        // Path fix for hosting
         $target_dir = "../assets/profiles/";
-        if (!is_dir($target_dir)) mkdir($target_dir, 0777, true); // Folder banana agar nahi hai
+        if (!is_dir($target_dir)) mkdir($target_dir, 0777, true); 
 
         $file_extension = pathinfo($_FILES['profile_pic']['name'], PATHINFO_EXTENSION);
         $file_name = "admin_" . $admin_id . "_" . time() . "." . $file_extension;
         $target_file = $target_dir . $file_name;
 
         if (move_uploaded_file($_FILES['profile_pic']['tmp_name'], $target_file)) {
-            $img_sql = ", profile_pic='$target_file'";
+            // Hum database mein relative path store karenge
+            $db_path = "assets/profiles/" . $file_name;
+            $img_sql = ", profile_pic='$db_path'";
         } else {
             $error = "Failed to upload image.";
         }
@@ -35,12 +40,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $update_query = "UPDATE users SET name='$name', email='$email' $img_sql WHERE id='$admin_id'";
     if (mysqli_query($conn, $update_query)) {
         $success = "Profile updated successfully!";
+        $_SESSION['admin_name'] = $name; // Session update
     } else {
         $error = "Database error: " . mysqli_error($conn);
     }
 }
 
-// 2. Refresh Admin Details
+// 3. Fetch Fresh Details
 $query = mysqli_query($conn, "SELECT * FROM users WHERE id = '$admin_id'");
 $admin = mysqli_fetch_assoc($query);
 ?>
@@ -49,65 +55,55 @@ $admin = mysqli_fetch_assoc($query);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile | Polymath Path</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #f4f7f6; font-family: 'Poppins', sans-serif; }
-        .main-content { margin-left: 300px; width: calc(100% - 300px); padding: 40px; }
+        body { background: #f4f7f6; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+        .sidebar-fixed { background: #1e40af !important; width: 260px; height: 100vh; position: fixed; }
+        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 30px; margin-top: 20px; }
         .profile-card { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 4px 18px rgba(30,64,175,0.07); text-align: center; border: 1px solid #eee; height: 100%; }
         .profile-img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 5px solid #3b82f6; margin-bottom: 20px; background: #eee; }
-        .form-control { border-radius: 12px; padding: 12px; border: 1.5px solid #e0e0e0; transition: 0.3s; }
+        .form-control { border-radius: 12px; padding: 12px; border: 1.5px solid #e0e0e0; }
         .form-control:focus { border-color: #3b82f6; box-shadow: none; }
-        .sidebar-fixed { background: #1e40af !important; }
-.navbar {
-    position: sticky;
-    top: 0;
-    z-index: 1050; 
-    width: 100%;
-}
-.main-content { 
-    margin-left: 260px !important; /* Sidebar ki fixed width */
-    width: calc(100% - 260px) !important; 
-    padding: 30px !important; 
-    margin-top: 20px !important; /* Navbar se thora gap */
-    display: block !important;
-}
-
-/* Row ko poori width use karne dein */
-.row {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    width: 100% !important;
-}
+        .navbar { position: sticky; top: 0; z-index: 1050; width: 100%; }
     </style>
 </head>
 <body>
 
-<body>
 <?php include '../navbar.php'; ?>
+
 <div class="d-flex">
     <?php include 'sidebar.php'; ?>
        
     <div class="main-content">
         <h2 class="fw-bold mb-4" style="color: #1e40af;">My Profile</h2>
         
-        <?php if($success) echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>$success<button type='button' class='btn-close' data-bs-dismiss='alert'></button></div>"; ?>
-        <?php if($error) echo "<div class='alert alert-danger'>$error</div>"; ?>
+        <?php if($success): ?>
+            <div class='alert alert-success alert-dismissible fade show' style="border-radius: 15px;">
+                <i class="fas fa-check-circle me-2"></i> <?php echo $success; ?>
+                <button type='button' class='btn-close' data-bs-dismiss='alert'></button>
+            </div>
+        <?php endif; ?>
+
+        <?php if($error): ?>
+            <div class='alert alert-danger' style="border-radius: 15px;"><?php echo $error; ?></div>
+        <?php endif; ?>
 
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="profile-card">
-                     <?php 
-                       $user_img = $admin['profile_pic']; 
-                       if (!empty($user_img) && file_exists($user_img)) {
-                        $display_img = $user_img;
-                      } else {
-       
-                       $display_img = '../assets/default-avatar.png'; 
-                          }
-                     ?>
-                     <img src="<?php echo $display_img; ?>?v=<?php echo time(); ?>" class="profile-img shadow" alt="Admin">
+                    <?php 
+                        $user_img = $admin['profile_pic']; 
+                        // BASE_URL use karke path banana
+                        if (!empty($user_img)) {
+                            $display_img = BASE_URL . $user_img;
+                        } else {
+                            $display_img = BASE_URL . 'assets/default-avatar.png'; 
+                        }
+                    ?>
+                    <img src="<?php echo $display_img; ?>?v=<?php echo time(); ?>" class="profile-img shadow" alt="Admin">
                     <h4 class="fw-bold mb-1"><?php echo htmlspecialchars($admin['name']); ?></h4>
                     <span class="badge bg-primary px-3 py-2 mb-3" style="border-radius: 20px;"><?php echo strtoupper($admin['role']); ?></span>
                     <hr>

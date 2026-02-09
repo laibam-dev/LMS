@@ -1,15 +1,22 @@
 <?php
-// Current page ka naam nikalne ke liye
+// Page ka naam nikalne ke liye
 $current_page = basename($_SERVER['PHP_SELF']);
 
-// Pehle check karein ke BASE_URL define hai ya nahi (safety ke liye)
-if (!defined('BASE_URL')) {
-    include_once 'config/db.php';
+// Database aur count logic
+include_once 'config/db.php'; 
+$unread_count = 0;
+
+// Agar Admin login hai toh 'unread' messages ginein
+if (isset($_SESSION['admin_id'])) {
+    $msg_query = "SELECT COUNT(*) as total FROM contact_messages WHERE status = 'unread'";
+    $msg_result = mysqli_query($conn, $msg_query);
+    if ($msg_result) {
+        $msg_data = mysqli_fetch_assoc($msg_result);
+        $unread_count = $msg_data['total'];
+    }
 }
 ?>
-
 <link rel="stylesheet" href="<?php echo BASE_URL; ?>navbar.css">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <nav class="main-navbar">
@@ -23,10 +30,18 @@ if (!defined('BASE_URL')) {
             <li>
                 <a href="<?php echo BASE_URL; ?>index.php" class="<?php echo ($current_page == 'index.php') ? 'active' : ''; ?>">Home</a>
             </li>
-            
             <li>
-                <a href="<?php echo BASE_URL; ?>contact.php" class="<?php echo ($current_page == 'contact.php') ? 'active' : ''; ?>">Contact</a>
-            </li>            
+                <a href="<?php echo (isset($_SESSION['admin_id'])) ? BASE_URL.'admin/view_messages.php' : BASE_URL.'contact.php'; ?>" 
+                   class="position-relative <?php echo ($current_page == 'contact.php' || $current_page == 'view_messages.php') ? 'active' : ''; ?>">
+                    Contact
+                    <?php if($unread_count > 0): ?>
+                        <span class="badge rounded-pill bg-danger" style="font-size: 10px; position: absolute; top: -5px; right: -10px;">
+                            <?php echo $unread_count; ?>
+                        </span>
+                    <?php endif; ?>
+                </a>
+            </li>
+    
             
             <li class="dropdown">
                 <a href="javascript:void(0)" class="nav-btn dropbtn">
