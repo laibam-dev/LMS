@@ -24,10 +24,17 @@ if($conn->connect_error){
     die("Connection failed: " . $conn->connect_error);
 }
 
+
+// User Activity record karne ka function
 function log_activity($conn, $user_id, $action, $description) {
+    // Data ko clean karna taake SQL injection na ho
     $action = mysqli_real_escape_string($conn, $action);
     $description = mysqli_real_escape_string($conn, $description);
-    $query = "INSERT INTO activity_log (user_id, action, description) VALUES ('$user_id', '$action', '$description')";
-    mysqli_query($conn, $query);
+    
+    // Activity log table mein entry insert karna
+    $query = "INSERT INTO activity_log (user_id, action, description) 
+              VALUES ('$user_id', '$action', '$description')";
+    
+    return mysqli_query($conn, $query);
 }
 ?>
