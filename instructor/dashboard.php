@@ -100,7 +100,7 @@ $stmt->close();
             <h1>Welcome back, <?php echo htmlspecialchars($instructor_name); ?></h1>
             <p>Manage your courses and students from here.</p>
         </div>
-        <a href="add_course.php" class="add-btn">+ Add Course</a>
+        <a href="<?php echo BASE_URL; ?>instructor/add_course.php" class="add-btn">+ Add Course</a>
     </div>
 
     <div class="cards">
@@ -121,7 +121,6 @@ $stmt->close();
             <div class="card-icon">👥</div>
         </div>
 
-        <!-- ✅ Upcoming Tasks -->
         <div class="card">
             <div>
                 <small>Upcoming Tasks</small>
@@ -184,7 +183,7 @@ $stmt->close();
                         </span>
 
                         <a class="course-link"
-                           href="course_overview.php?course_id=<?php echo (int)$row['id']; ?>">
+                           href="<?php echo BASE_URL; ?>instructor/course_overview.php?course_id=<?php echo (int)$row['id']; ?>">
                             View Details →
                         </a>
                     </div>
