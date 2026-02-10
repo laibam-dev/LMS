@@ -1,6 +1,6 @@
 <?php
 session_start();
-// BASE_URL aur database ke liye db.php include
+// Dashboard folder ke andar hone ki wajah se path 2 level piche jaye ga (../../)
 require_once '../../config/db.php'; 
 
 if(!isset($_SESSION['student_id'])){
@@ -9,12 +9,12 @@ if(!isset($_SESSION['student_id'])){
     exit();
 }
 
-// Navbar include path - isay bhi dynamic rakha hai
+// Navbar include path
 include $_SERVER['DOCUMENT_ROOT'] . '/LMS/navbar.php'; 
 
 $student_id = $_SESSION['student_id'];
 
-// SQL Query
+// SQL Query for enrolled courses
 $sql = "
 SELECT c.id, c.title, c.subject, c.description, e.progress
 FROM courses c
@@ -41,6 +41,10 @@ foreach($courses as $course){
 $overall_progress = ($course_count > 0) 
     ? round($total_progress / $course_count) 
     : 0;
+
+// Announcements fetch karna (Sirf top 2 dashboard par dikhane ke liye)
+$ann_query = "SELECT * FROM announcements WHERE target_role IN ('all', 'student') ORDER BY created_at DESC LIMIT 2";
+$ann_result = mysqli_query($conn, $ann_query);
 ?>
 
 <!DOCTYPE html>
@@ -48,6 +52,24 @@ $overall_progress = ($course_count > 0)
 <head>
     <title>Student Dashboard</title>
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>student/Styles/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Naya Announcements Style (White Box with Blue/Black Text) */
+        .announcement-box { 
+            background: #ffffff; 
+            border: 1px solid #e2e8f0; 
+            border-left: 5px solid #1e40af; 
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-top: 20px; 
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .announcement-box h4 { color: #1e40af; margin-bottom: 10px; font-weight: bold; }
+        .announcement-box p { color: #334155; margin: 5px 0; font-size: 0.95rem; }
+        .announcement-box a { color: #3b82f6; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+        .announcement-box a:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
 
@@ -63,6 +85,10 @@ $overall_progress = ($course_count > 0)
         </div>
 
         <div class="sidebar-menu" style="margin-top: 20px;">
+            <a href="<?php echo BASE_URL; ?>student/Dashboard/announcements.php" class="btn" style="background: #1e40af; color: white; text-align: center; margin-bottom: 10px;">
+                <i class="fas fa-bullhorn"></i> Announcements
+            </a>
+            
             <a href="<?php echo BASE_URL; ?>student/logout.php" class="btn" style="background: white; color: black; text-align: center;">Logout</a>
         </div>
     </div>
@@ -72,6 +98,18 @@ $overall_progress = ($course_count > 0)
             <h2>Welcome <?php echo htmlspecialchars($_SESSION['student_name']); ?> </h2>
             <p>Here is your dashboard overview</p>
         </div>
+
+        <?php if(mysqli_num_rows($ann_result) > 0): ?>
+            <div class="announcement-box">
+                <h4><i class="fas fa-bullhorn"></i> Latest Announcements</h4>
+                <?php while($ann = mysqli_fetch_assoc($ann_result)): ?>
+                    <p><strong><?php echo htmlspecialchars($ann['title']); ?>:</strong> 
+                    <?php echo substr(htmlspecialchars($ann['message']), 0, 100); ?>...</p>
+                <?php endwhile; ?>
+                <hr style="border: 0.5px solid #e2e8f0; margin: 15px 0;">
+                <a href="<?php echo BASE_URL; ?>student/Dashboard/announcements.php">Read All Announcements <i class="fas fa-arrow-right"></i></a>
+            </div>
+        <?php endif; ?>
 
         <div class="section">
             <h2>Available Courses to Join</h2>
@@ -89,7 +127,6 @@ $overall_progress = ($course_count > 0)
                         echo '<h4>'.htmlspecialchars($c['title']).'</h4>';
                         echo '<p style="color: #17a2b8; font-weight: bold; margin: 5px 0;">'.htmlspecialchars($c['subject']).'</p>';
                         echo '<p style="font-size: 0.9em; color: #666;">'.substr(htmlspecialchars($c['description']), 0, 100).'...</p>';
-                        // Join button path with BASE_URL
                         echo '<a href="'.BASE_URL.'student/Dashboard/enroll_process.php?course_id='.$c['id'].'" class="button">Join Course</a>';
                         echo '</div>';
                     }
@@ -129,7 +166,7 @@ $overall_progress = ($course_count > 0)
                 <p>Current Attendance: 85%</p> 
                 <a href="<?php echo BASE_URL; ?>student/Dashboard/attendance_details.php" class="button">View History</a>
             </div>
-            <div class="card">
+            <div class="card :">
                 <h3>Certificates</h3>
                 <p>View your completed certificates</p>
                 <a href="<?php echo BASE_URL; ?>student/Dashboard/certificates.php" class="button">View Certificates</a>
