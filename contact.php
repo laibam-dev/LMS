@@ -1,24 +1,33 @@
 <?php
-session_start();
-// Sahi file name 'db.php' hai aur isme BASE_URL define hai
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Sahi file name 'db.php' include karein
 require_once 'config/db.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check karein ke aapki db.php mein variable ka naam $conn hai ya $db
+    // Form se data lena aur clean karna
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $message = mysqli_real_escape_string($conn, $_POST['message']);
 
-   
-    $sql = "INSERT INTO contact_messages (full_name, email, message, status) VALUES ('$name', '$email', '$message', 'unread')";
+    // SQL query jo 'status' column ke saath hai
+    // Table columns: full_name, email, message, status
+    $sql = "INSERT INTO contact_messages (full_name, email, message, status) 
+            VALUES ('$name', '$email', '$message', 'unread')";
 
     if (mysqli_query($conn, $sql)) {
-        // Redirect path ko dynamic rakha taake host ke mutabiq chale
+        // Redirect use karke refresh par duplicate message rokein
         echo "<script>alert('Thank you! Message sent.'); window.location.href='contact.php';</script>";
+        exit;
     } else {
+        // Error handling
         echo "Error: " . mysqli_error($conn);
     }
 }
+
+// Navbar include karein
 include 'navbar.php'; 
 ?>
 <!DOCTYPE html>
