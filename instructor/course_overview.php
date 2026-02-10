@@ -1,6 +1,7 @@
 <?php
-require_once "session.php";
 require_once "../config/db.php";
+require_once "../config/base.php";
+require_once "session.php";
 
 $instructor_id    = $_SESSION['instructor_id'];
 $instructor_name  = $_SESSION['instructor_name'] ?? 'Instructor';
@@ -34,24 +35,27 @@ if ($course_id > 0) {
             <p>Choose what you want to manage for: <b><?php echo htmlspecialchars($courseTitle); ?></b></p>
         </div>
 
-        <a href="courses.php" class="btn-light">← Back</a>
+        <a href="<?php echo BASE_URL; ?>/instructor/courses.php" class="btn-light">← Back</a>
     </div>
 
     <div class="action-buttons">
 
-        <a class="action-btn lessons" href="lessons.php?course_id=<?php echo $course_id; ?>">
+        <a class="action-btn lessons"
+           href="<?php echo BASE_URL; ?>/instructor/lessons.php?course_id=<?php echo $course_id; ?>">
             <div class="icon">📚</div>
             <div class="title">Lessons</div>
             <div class="subtitle">Manage course lessons</div>
         </a>
 
-        <a class="action-btn assessments" href="assessments.php?course_id=<?php echo $course_id; ?>">
+        <a class="action-btn assessments"
+           href="<?php echo BASE_URL; ?>/instructor/assessments.php?course_id=<?php echo $course_id; ?>">
             <div class="icon">📝</div>
             <div class="title">Assessments</div>
             <div class="subtitle">Assignments & grading</div>
         </a>
 
-        <a class="action-btn quizzes" href="quizzes.php?course_id=<?php echo $course_id; ?>">
+        <a class="action-btn quizzes"
+           href="<?php echo BASE_URL; ?>/instructor/quizzes.php?course_id=<?php echo $course_id; ?>">
             <div class="icon">✅</div>
             <div class="title">Quizzes</div>
             <div class="subtitle">Tests & MCQs</div>

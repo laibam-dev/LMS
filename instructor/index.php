@@ -1,9 +1,12 @@
 <?php
-session_start();
-// 1. db.php include kiya taake BASE_URL mil jaye
 require_once "../config/db.php";
+require_once "../config/base.php";
 
-// 2. Agar pehle se login hai toh dashboard par bhejain (Dynamic Path)
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+/* Already logged in → go dashboard */
 if (isset($_SESSION['instructor_id']) && ($_SESSION['role'] ?? '') === 'instructor') {
     header("Location: " . BASE_URL . "instructor/dashboard.php");
     exit;
@@ -11,9 +14,8 @@ if (isset($_SESSION['instructor_id']) && ($_SESSION['role'] ?? '') === 'instruct
 
 $error = "";
 if (isset($_GET['error'])) {
-    // Error messages ko mazeed clear kiya ja sakta hai
-    if($_GET['error'] == 'invalid') $error = "Invalid email or password";
-    elseif($_GET['error'] == 'empty') $error = "Please fill all fields";
+    if ($_GET['error'] == 'invalid') $error = "Invalid email or password";
+    elseif ($_GET['error'] == 'empty') $error = "Please fill all fields";
     else $error = "Login failed. Please try again.";
 }
 ?>

@@ -1,6 +1,8 @@
 <?php
-require_once "session.php";
 require_once "../config/db.php";
+require_once "../config/base.php";
+require_once "session.php";
+ // ✅ BASE PATH
 
 $instructor_id = $_SESSION['instructor_id'];
 
@@ -11,7 +13,7 @@ $id        = (int)($_GET['id'] ?? 0);
 $course_id = (int)($_GET['course_id'] ?? 0);
 
 if ($id <= 0 || $course_id <= 0) {
-    header("Location: courses.php");
+    header("Location: " . BASE_URL . "/instructor/courses.php");
     exit;
 }
 
@@ -28,7 +30,7 @@ $assessment = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
 if (!$assessment) {
-    header("Location: assessments.php?course_id=" . $course_id);
+    header("Location: " . BASE_URL . "/instructor/assessments.php?course_id=" . $course_id);
     exit;
 }
 
@@ -57,7 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $message = "Assessment updated successfully!";
             $message_type = "success";
 
-            // refresh updated data
             $assessment['title'] = $title;
             $assessment['type'] = $type;
             $assessment['due_date'] = $due_date;
@@ -78,7 +79,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <h1>Edit Assessment</h1>
         </div>
 
-        <a href="assessments.php?course_id=<?php echo $course_id; ?>" class="btn-light">← Back</a>
+        <a href="<?php echo BASE_URL; ?>/instructor/assessments.php?course_id=<?php echo $course_id; ?>" class="btn-light">
+            ← Back
+        </a>
     </div>
 
     <div class="form-card">
@@ -99,18 +102,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="form-group">
                 <label>Type *</label>
                 <select name="type" required>
-                    <option value="assignment" <?php echo ($assessment['type'] === 'assignment') ? 'selected' : ''; ?>>Assignment</option>
-                    <option value="quiz" <?php echo ($assessment['type'] === 'quiz') ? 'selected' : ''; ?>>Quiz</option>
+                    <option value="assignment" <?php echo ($assessment['type'] === 'assignment') ? 'selected' : ''; ?>>
+                        Assignment
+                    </option>
+                    <option value="quiz" <?php echo ($assessment['type'] === 'quiz') ? 'selected' : ''; ?>>
+                        Quiz
+                    </option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label>Due Date</label>
-                <input type="date" name="due_date" value="<?php echo !empty($assessment['due_date']) ? $assessment['due_date'] : ''; ?>">
+                <input type="date" name="due_date"
+                       value="<?php echo !empty($assessment['due_date']) ? $assessment['due_date'] : ''; ?>">
             </div>
 
             <div class="form-actions">
-                <a href="assessments.php?course_id=<?php echo $course_id; ?>" class="btn-light">Cancel</a>
+                <a href="<?php echo BASE_URL; ?>/instructor/assessments.php?course_id=<?php echo $course_id; ?>" class="btn-light">
+                    Cancel
+                </a>
                 <button type="submit" class="btn-primary">Update</button>
             </div>
 

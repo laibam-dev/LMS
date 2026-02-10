@@ -1,6 +1,8 @@
 <?php
-require_once "session.php";
 require_once "../config/db.php";
+require_once "../config/base.php";
+require_once "session.php";
+
 
 $course_id = isset($_GET['course_id']) ? (int)$_GET['course_id'] : 0;
 if ($course_id <= 0) {

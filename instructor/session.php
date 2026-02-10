@@ -1,11 +1,8 @@
 <?php
-// instructor/session.php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 
 if (!isset($_SESSION['instructor_id']) || ($_SESSION['role'] ?? '') !== 'instructor') {
-    header("Location: index.php?error=blocked");
+    header("Location: ../index.php?error=blocked");
     exit;
 }
 

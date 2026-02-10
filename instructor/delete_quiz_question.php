@@ -1,6 +1,8 @@
 <?php
-require_once "session.php";
 require_once "../config/db.php";
+require_once "../config/base.php";
+require_once "session.php";
+ // ✅ BASE PATH
 
 $instructor_id = $_SESSION['instructor_id'];
 
@@ -11,7 +13,7 @@ $quiz_id   = (int)($_GET['quiz_id'] ?? 0);
 $course_id = (int)($_GET['course_id'] ?? 0);
 
 if ($quiz_id <= 0 || $course_id <= 0) {
-    header("Location: courses.php");
+    header("Location: " . BASE_URL . "/instructor/courses.php");
     exit;
 }
 
@@ -30,7 +32,7 @@ $quizRow = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
 if (!$quizRow) {
-    header("Location: quizzes.php?course_id=" . $course_id);
+    header("Location: " . BASE_URL . "/instructor/quizzes.php?course_id=" . $course_id);
     exit;
 }
 
@@ -52,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $message = "Please fill all fields and choose correct option.";
         $message_type = "error";
     } else {
-        // ✅ IMPORTANT: quiz_questions table uses assessment_id
+
         $stmt = $conn->prepare("
             INSERT INTO quiz_questions (assessment_id, question, option_a, option_b, option_c, option_d, correct_option)
             VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -91,7 +93,9 @@ $stmt->close();
             <p>Quiz: <b><?php echo htmlspecialchars($quizTitle); ?></b></p>
         </div>
 
-        <a href="quizzes.php?course_id=<?php echo $course_id; ?>" class="btn-light">← Back</a>
+        <a href="<?php echo BASE_URL; ?>/instructor/quizzes.php?course_id=<?php echo $course_id; ?>" class="btn-light">
+            ← Back
+        </a>
     </div>
 
     <div class="form-card">
@@ -167,7 +171,7 @@ $stmt->close();
                         <td><b><?php echo htmlspecialchars($q['correct_option']); ?></b></td>
                         <td>
                             <a class="btn-sm danger"
-                               href="delete_quiz_question.php?id=<?php echo (int)$q['id']; ?>&quiz_id=<?php echo $quiz_id; ?>&course_id=<?php echo $course_id; ?>"
+                               href="<?php echo BASE_URL; ?>/instructor/delete_quiz_question.php?id=<?php echo (int)$q['id']; ?>&quiz_id=<?php echo $quiz_id; ?>&course_id=<?php echo $course_id; ?>"
                                onclick="return confirm('Delete this question?');">
                                 Delete
                             </a>

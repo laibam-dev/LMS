@@ -1,6 +1,8 @@
 <?php
-require_once "session.php";
 require_once "../config/db.php";
+require_once "../config/base.php";
+require_once "session.php";
+   // ✅ BASE PATH ADDED
 
 $instructor_id    = $_SESSION['instructor_id'];
 $instructor_name  = $_SESSION['instructor_name'] ?? 'Instructor';
@@ -30,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("issss", $instructor_id, $title, $subject, $description, $status);
 
         if ($stmt->execute()) {
-            header("Location: courses.php");
+            header("Location: " . BASE_URL . "/instructor/courses.php");   // ✅ BASE PATH REDIRECT
             exit;
         } else {
             $error = "Something went wrong. Please try again.";
@@ -47,7 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h1>Add Course</h1>
             <p>Create a new course.</p>
         </div>
-        <a href="courses.php" class="btn-light">← Back</a>
+
+        <!-- ✅ BASE PATH BACK -->
+        <a href="<?php echo BASE_URL; ?>/instructor/courses.php" class="btn-light">← Back</a>
     </div>
 
     <div class="form-card">
@@ -92,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="form-actions">
-                <a href="courses.php" class="btn-light">Cancel</a>
+                <a href="<?php echo BASE_URL; ?>/instructor/courses.php" class="btn-light">Cancel</a>
                 <button type="submit" class="btn-primary">Save Course</button>
             </div>
 
