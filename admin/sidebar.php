@@ -64,10 +64,8 @@
         </a>
     </li>
 
-    <li class="nav-item list-unstyled mt-auto">
-        <a href="<?php echo BASE_URL; ?>admin/logout.php" class="nav-link text-danger fw-bold">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-        </a>
-    </li>
+    <hr class="text-white-50">
+<a href="<?php echo BASE_URL; ?>logout.php" class="nav-link text-danger fw-bold mt-auto" onclick="return confirm('Are you sure you want to logout?')">
+    <i class="fas fa-power-off me-2"></i> Logout
+</a>
 </div>
