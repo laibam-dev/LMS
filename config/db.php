@@ -1,40 +1,52 @@
 <?php
-// 1. Check current host (Localhost or Online)
-if ($_SERVER['HTTP_HOST'] == 'localhost') {
-    // Localhost settings (VS Code)
+
+// Detect environment
+if ($_SERVER['HTTP_HOST'] === 'localhost') {
+
+    // Local XAMPP settings
     define('BASE_URL', 'http://localhost/LMS/');
+
     $host = "localhost";
     $user = "root";
     $password = "";
-    $dbname = "lms"; // Jo aapne bataya
+    $dbname = "lms";
+    $port = 3307;
+
 } else {
-    // InfinityFree settings (Online)
+
+    // Online hosting settings
     define('BASE_URL', 'http://laiba-lms.great-site.net/LMS/');
-    $host = "sql303.infinityfree.com"; 
-    $user = "if0_40800821";         
-    $password = "r7890laiba1"; 
-    $dbname = "if0_40800821_lms"; 
+
+    $host = "sql303.infinityfree.com";
+    $user = "if0_40800821";
+    $password = "r7890laiba1";
+    $dbname = "if0_40800821_lms";
+    $port = 3306;
 }
 
-// 2. Create Connection
-$conn = new mysqli($host, $user, $password, $dbname);
+// Create connection
+$conn = new mysqli($host, $user, $password, $dbname, $port);
 
-// 3. Check Connection
-if($conn->connect_error){
-    die("Connection failed: " . $conn->connect_error);
+// Check connection
+if ($conn->connect_error) {
+    die("Database connection failed: " . $conn->connect_error);
 }
 
+// Optional: set charset
+$conn->set_charset("utf8mb4");
 
-// User Activity record karne ka function
+// -----------------------------
+// Activity Logger Function
+// -----------------------------
 function log_activity($conn, $user_id, $action, $description) {
-    // Data ko clean karna taake SQL injection na ho
+
     $action = mysqli_real_escape_string($conn, $action);
     $description = mysqli_real_escape_string($conn, $description);
-    
-    // Activity log table mein entry insert karna
-    $query = "INSERT INTO activity_log (user_id, action, description) 
-              VALUES ('$user_id', '$action', '$description')";
-    
-    return mysqli_query($conn, $query);
+
+    $sql = "INSERT INTO activity_log (user_id, action, description)
+            VALUES ('$user_id', '$action', '$description')";
+
+    mysqli_query($conn, $sql);
 }
+
 ?>
