@@ -9,7 +9,6 @@ if(!isset($_SESSION['student_id'])){
     header("Location: " . BASE_URL . "student/login.php");
     exit();
 }
-
 // Achievements array mein badges ke paths ko BASE_URL ke saath dynamic kiya
 $achievements = [
     ["title" => "Completed Web Development", "badge" => BASE_URL . "assets/badge1.png", "date" => "2025-12-01"],
